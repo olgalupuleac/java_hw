@@ -127,4 +127,24 @@ public class HashTableTest {
         assertEquals(0, hashTable.size());
     }
 
+    /**
+     * Appends in a hash table more elements than initial capacity and tests if the rebuild method does not change
+     * the hash table content.
+     *
+     * @throws Exception
+     * @see HashTable#clear
+     */
+    @Test
+    public void rebuild() throws Exception {
+        HashTable hashTable = new HashTable();
+        for (int i = 0; i < 2000; i++) {
+            Integer keyAndVal = i;
+            hashTable.put(keyAndVal.toString(), keyAndVal.toString());
+        }
+        for (int i = 0; i < 2000; i++) {
+            Integer keyAndVal = i;
+            assertEquals(keyAndVal.toString(), hashTable.get(keyAndVal.toString()));
+        }
+    }
+
 }

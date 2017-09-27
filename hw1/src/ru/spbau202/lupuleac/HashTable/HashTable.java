@@ -7,7 +7,7 @@ package ru.spbau202.lupuleac.HashTable;
  * and resolves collisions using separate chaining method.
  */
 public class HashTable {
-    private static final int INITIAL_CAPACITY = (int) 1e6 + 7;
+    private static final int INITIAL_CAPACITY = 1000;
     private int size = 0;
     private CollisionList[] array = new CollisionList[INITIAL_CAPACITY];
 
