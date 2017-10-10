@@ -1,4 +1,4 @@
-group 'ru.spbau202.lupuleac.hw3'
+group 'ru.spbau202.lupuleac.hw2.2'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

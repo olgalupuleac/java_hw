@@ -36,7 +36,7 @@ public class SpiralTest {
      * The array size is small so the expected result could be predicted and compared to actual.
      *
      * @throws Exception
-     * @see Spiral#printSpiral(int[][])
+     * @see Spiral#printSpiral(int[][], PrintStream) 
      */
     @Test
     public void printSpiralOdd() throws Exception {
@@ -47,7 +47,7 @@ public class SpiralTest {
                 array[i][j] = i * n + j;
             }
         }
-        Spiral.printSpiral(array);
+        Spiral.printSpiral(array, System.out);
         assertEquals("12 7 6 11 16 17 18 13 8 3 2 1 0 5 10 15 20 21 22 23 24 19 14 9 4 \n",
                 outContent.toString());
     }
@@ -57,7 +57,7 @@ public class SpiralTest {
      * The array size is small so the expected result could be predicted and compared to actual.
      *
      * @throws Exception
-     * @see Spiral#printSpiral(int[][])
+     * @see Spiral#printSpiral(int[][], PrintStream)
      */
     @Test
     public void printSpiralEvenSize() throws Exception {
@@ -68,7 +68,7 @@ public class SpiralTest {
                 array[i][j] = i * n + j;
             }
         }
-        Spiral.printSpiral(array);
+        Spiral.printSpiral(array, System.out);
         assertEquals("10 6 5 9 13 14 15 11 7 3 2 1 0 4 8 12 \n",
                 outContent.toString());
     }

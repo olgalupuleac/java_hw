@@ -1,5 +1,7 @@
 package ru.spbau202.lupuleac.Spiral;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -33,25 +35,25 @@ public class Spiral {
      * @param array is two-dimensional array to be printed
      * @see Spiral#notOutOfBonds(int, int, int)
      */
-    public static void printSpiral(int[][] array) {
+    public static void printSpiral(int[][] array, PrintStream out) {
         int x = array.length / 2;
         int y = array.length / 2;
         final int n = array.length;
         for (int k = 1; k <= n; k += 2) {
             for (int i = 0; i < k && notOutOfBonds(x, y, n); i++) {
-                System.out.printf("%d ", array[x--][y]);
+                out.printf("%d ", array[x--][y]);
             }
             for (int i = 0; i < k && notOutOfBonds(x, y, n); i++) {
-                System.out.printf("%d ", array[x][y--]);
+                out.printf("%d ", array[x][y--]);
             }
             for (int i = 0; i < k + 1 && notOutOfBonds(x, y, n); i++) {
-                System.out.printf("%d ", array[x++][y]);
+                out.printf("%d ", array[x++][y]);
             }
             for (int i = 0; i < k + 1 && notOutOfBonds(x, y, n); i++) {
-                System.out.printf("%d ", array[x][y++]);
+                out.printf("%d ", array[x][y++]);
             }
         }
-        System.out.printf("\n");
+        out.printf("\n");
     }
 
     /**

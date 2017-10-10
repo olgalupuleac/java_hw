@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="ru.spbau202.lupuleac.hw3_main" target="1.8" />
-      <module name="ru.spbau202.lupuleac.hw3_test" target="1.8" />
+      <module name="Spiral_main" target="1.8" />
+      <module name="Spiral_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
