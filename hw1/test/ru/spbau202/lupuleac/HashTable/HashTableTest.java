@@ -128,7 +128,7 @@ public class HashTableTest {
     }
 
     /**
-     * Appends in a hash table more elements than initial capacity and tests if the rebuild method does not change
+     * Appends to the hash table more elements than initial capacity and tests if the rebuild method does not change
      * the hash table content.
      *
      * @throws Exception
@@ -145,6 +145,52 @@ public class HashTableTest {
             Integer keyAndVal = i;
             assertEquals(keyAndVal.toString(), hashTable.get(keyAndVal.toString()));
         }
+    }
+
+    /**
+     * Appends to the hash table two elements with same hash to test the collision.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void collision() throws Exception {
+        HashTable hashTable = new HashTable();
+        Integer x = 0;
+        String firstString = x.toString();
+        String secondString = null;
+        int hash = (firstString.hashCode() % 1000 + 1000) % 1000;
+        for (int i = 1; ; i++) {
+            Integer stringGenerator = i;
+            int anotherHash = (stringGenerator.toString().hashCode() + 1000) % 1000;
+            if (hash == anotherHash) {
+                secondString = stringGenerator.toString();
+                hashTable.put(firstString, "1");
+                hashTable.put(secondString, "2");
+                break;
+            }
+        }
+        assertEquals("1", hashTable.get(firstString));
+        assertEquals("2", hashTable.get(secondString));
+    }
+
+    /**
+     * Tests the hash table if the given key has negative hashCode.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void negativeHashCode() throws Exception {
+        String string = null;
+        HashTable hashTable = new HashTable();
+        for (int i = 1; ; i++) {
+            Integer stringGenerator = i;
+            string = stringGenerator.toString();
+            if (string.hashCode() < 0) {
+                hashTable.put(string, "value");
+                break;
+            }
+        }
+        assertEquals("value", hashTable.get(string));
     }
 
 }

@@ -19,7 +19,7 @@ public class HashTable {
      * @see String#hashCode()
      */
     private int hash(String key) {
-        return (key.hashCode() + array.length) % array.length;
+        return (key.hashCode() % array.length + array.length) % array.length;
     }
 
     /**
@@ -38,8 +38,7 @@ public class HashTable {
      * @return true if this hash table contains a mapping for the specified key, false otherwise
      */
     public boolean contains(String key) {
-        int arrayIndex = hash(key);
-        return array[arrayIndex] != null && array[arrayIndex].get(key) != null;
+        return get(key) != null;
     }
 
     /**
