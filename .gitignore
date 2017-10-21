@@ -1,0 +1,15 @@
+*/
+!*/src/*
+!*/test/*
+!*/.idea/compiler.xml
+!*/.idea/gradle.xml
+!*/.idea/misc.xml
+!*/.idea/modules.xml
+!*.iml
+!*/build.gradle
+!*/gradle/wrapper/gradle-wrapper.properties
+!*/gradlew
+!*/gradlew.bat
+!*/settings.gradle
+!hw1/.idea/project-template.xml
+
