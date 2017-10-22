@@ -13,7 +13,7 @@ import java.util.Iterator;
  *
  * @param <T> is the generic type of the element in the BinarySearchTree. T must implement Comparable.
  */
-public class BinarySearchTree<T extends Comparable> {
+public class BinarySearchTree<T extends Comparable<? super T>> {
     private int size;
     private BinarySearchTree<T> left;
     private BinarySearchTree<T> right;
