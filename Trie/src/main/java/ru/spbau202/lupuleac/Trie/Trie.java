@@ -5,27 +5,32 @@ import java.io.*;
 /**
  * Class Trie implements a container for unique Strings which allows to put and remove elements
  * in linear time of the element length.
- * The algorithm of all methods is similar: we start at the root and, looping over string, pass to the next vertex relevant to the character of the string.
+ * The algorithm of all methods is similar: we start at the root and, looping over string,
+ * pass to the next vertex relevant to the character of the string.
  * The null cannot be added to the Trie as an element.
  * The data can be also serialized or deserialized.
  */
 public class Trie implements Serializable {
 
     /**
-     * Class represents a vertex in a Trie, which keeps references to the next vertexes in the tree, a mark if it is an
-     * end of the element in the trie and number of elements which starts with the prefix relevant to this vertex.
+     * Class represents a vertex in a Trie,
+     * which keeps references to the next vertexes in the tree, a mark if it is an
+     * end of the element in the trie
+     * and number of elements which starts with the prefix relevant to this vertex.
      */
     private class Vertex implements Serializable {
         private final int NUMBER_OF_CHARACTERS = 65536;
-        Vertex[] next = new Vertex[NUMBER_OF_CHARACTERS];
-        boolean endOfString;
-        int howManyStartsWithPrefix;
+        private Vertex[] next = new Vertex[NUMBER_OF_CHARACTERS];
+        private boolean isEndOfString;
+        private int howManyStartsWithPrefix;
     }
 
     private Vertex root = new Vertex();
 
     /**
      * Adds the string to the trie.
+     * The execution time is O(n), where n is length of
+     * the string to be added.
      *
      * @param element is the string to be added
      * @return true if the trie did not contain this element before
@@ -45,12 +50,14 @@ public class Trie implements Serializable {
             curVertex = nextVertex;
         }
         curVertex.howManyStartsWithPrefix++;
-        curVertex.endOfString = true;
+        curVertex.isEndOfString = true;
         return true;
     }
 
     /**
      * Checks if the element is in the trie.
+     * The execution time is O(n), where n is length of
+     * the string which presence is to be checked.
      *
      * @param element the element whose presence in this trie is to be checked
      * @return true if this trie contains this element
@@ -64,11 +71,13 @@ public class Trie implements Serializable {
             }
             curVertex = nextVertex;
         }
-        return curVertex.endOfString;
+        return curVertex.isEndOfString;
     }
 
     /**
      * Removes the string from the trie if present.
+     * The execution time is O(n), where n is length of
+     * the string to be removed.
      *
      * @param element is the string to be removed
      * @return true if this trie contains this element, false
@@ -85,12 +94,14 @@ public class Trie implements Serializable {
             curVertex = nextVertex;
         }
         curVertex.howManyStartsWithPrefix--;
-        curVertex.endOfString = false;
+        curVertex.isEndOfString = false;
         return true;
     }
 
     /**
      * Returns a number of elements in this trie which starts with the given prefix.
+     * The execution time is O(n), where n is length of
+     * the prefix.
      *
      * @param prefix is given prefix
      * @return the number of words starting with the prefix
