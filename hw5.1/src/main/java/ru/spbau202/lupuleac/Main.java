@@ -18,18 +18,29 @@ public class Main {
      * If the number of arguments is incorrect, it prints a message and returns.
      *
      * @param args are input and output filenames.
-     * @throws IOException if it occurs (given file does not exist, etc.)
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length != 2) {
-            System.err.println("Incorrect arguments");
+            System.err.println("Incorrect number of arguments");
             return;
         }
         File in = new File(args[0]);
-        ArrayList<Maybe<Integer>> numbers = getIntegersFromFile(in);
+        ArrayList<Maybe<Integer>> numbers = null;
+        try {
+           numbers = getIntegersFromFile(in);
+        }
+        catch(FileNotFoundException e){
+            System.err.println("Couldn't find the input file");
+            return;
+        }
         ArrayList<Maybe<Integer>> result = getSquares(numbers);
         File out = new File(args[1]);
-        writeMaybesToFile(out, result);
+        try{
+            writeMaybesToFile(out, result);
+        }
+        catch (FileNotFoundException e){
+            System.err.println("Couldn't find the output file");
+        }
     }
 
 
@@ -42,7 +53,8 @@ public class Main {
      * @return ArrayList containing Maybe of squares or Nothing.
      */
     @NotNull
-    private static ArrayList<Maybe<Integer>> getSquares(ArrayList<Maybe<Integer>> givenNumbers) {
+    private static ArrayList<Maybe<Integer>> getSquares(
+            ArrayList<Maybe<Integer>> givenNumbers) {
         ArrayList<Maybe<Integer>> result = new ArrayList<>();
         for (Maybe<Integer> i : givenNumbers) {
             result.add(i.map(x -> x * x));
@@ -57,9 +69,10 @@ public class Main {
      *
      * @param file is file to read from.
      * @return ArrayList of Maybe, containing parsed Integers or Nothing if line cannot be parsed.
+     * @throws FileNotFoundException if the file does not exist.
      */
     @NotNull
-    private static ArrayList<Maybe<Integer>> getIntegersFromFile(@NotNull File file) throws IOException {
+    private static ArrayList<Maybe<Integer>> getIntegersFromFile(@NotNull File file) throws FileNotFoundException {
         ArrayList<Maybe<Integer>> result = new ArrayList<>();
         try (Scanner reader = new Scanner(file)) {
             while (reader.hasNextLine()) {
@@ -82,10 +95,11 @@ public class Main {
      *
      * @param file   is file to write to.
      * @param maybes is ArrayList of Maybe containing integers or Nothing to write to file.
+     * @throws FileNotFoundException if the file does not exit.
      */
     private static void writeMaybesToFile(
             @NotNull File file, @NotNull ArrayList<Maybe<Integer>> maybes)
-            throws IOException {
+            throws FileNotFoundException {
         try (PrintStream writer = new PrintStream(file)) {
             for (Maybe<Integer> i : maybes) {
                 if (i.isPresent()) {

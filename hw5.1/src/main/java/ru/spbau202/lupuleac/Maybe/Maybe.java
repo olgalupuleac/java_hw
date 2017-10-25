@@ -1,6 +1,8 @@
 package ru.spbau202.lupuleac.Maybe;
 
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.function.Function;
 
 /**
@@ -12,7 +14,7 @@ public class Maybe<T> {
     private T value;
     private boolean nothing;
 
-    public Maybe(T t) {
+    public Maybe(@Nullable T t) {
         value = t;
     }
 

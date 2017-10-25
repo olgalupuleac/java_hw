@@ -7,13 +7,13 @@ import static org.junit.Assert.*;
 public class MaybeTest {
     @Test
     public void just() throws Exception {
-        Maybe<String> maybe = new Maybe<>("Maybe").just("just");
+        Maybe<String> maybe = Maybe.just("just");
         assertEquals("just", maybe.get());
     }
 
     @Test
     public void nothing() throws Exception {
-        Maybe<String> maybe = new Maybe<>("Maybe").nothing();
+        Maybe<String> maybe = Maybe.nothing();
         assertFalse(maybe.isPresent());
     }
 
@@ -47,6 +47,12 @@ public class MaybeTest {
         Maybe<Integer> maybe = new Maybe<>();
         Maybe<Integer> newMaybe = maybe.map(x -> 2 * x);
         assertFalse(newMaybe.isPresent());
+    }
+
+    @Test(expected = AccessToNothingException.class)
+    public void getFromNothing() throws Exception {
+        Maybe<Integer> maybe = new Maybe<>();
+        maybe.get();
     }
 
 }
