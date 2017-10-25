@@ -27,18 +27,16 @@ public class Main {
         File in = new File(args[0]);
         ArrayList<Maybe<Integer>> numbers = null;
         try {
-           numbers = getIntegersFromFile(in);
-        }
-        catch(FileNotFoundException e){
+            numbers = getIntegersFromFile(in);
+        } catch (FileNotFoundException e) {
             System.err.println("Couldn't find the input file");
             return;
         }
         ArrayList<Maybe<Integer>> result = getSquares(numbers);
         File out = new File(args[1]);
-        try{
+        try {
             writeMaybesToFile(out, result);
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.err.println("Couldn't find the output file");
         }
     }
