@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.sun.istack.internal.NotNull;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -13,11 +14,7 @@ import org.apache.commons.io.IOUtils;
  * unzip zip-files in certain directory which match the given regular expression.
  */
 public class UnzipByRegex {
-    private String path;
 
-    UnzipByRegex(String path) {
-        this.path = path;
-    }
 
     /**
      * Returns the list of zip files in the path.
@@ -25,8 +22,14 @@ public class UnzipByRegex {
      *
      * @return the ArrayList containing files which might be zip-files
      */
-    private ArrayList<File> getZipFiles() {
+    @NotNull
+    private static ArrayList<File> getZipFiles(
+            @NotNull String path) throws FileNotFoundException {
         File folder = new File(path);
+        if (!folder.exists()) {
+            throw new FileNotFoundException(
+                    "The specified path does not exist.");
+        }
         File[] listOfFiles = folder.listFiles();
         ArrayList<File> zipFiles = new ArrayList<>();
         for (File file : listOfFiles) {
@@ -44,8 +47,9 @@ public class UnzipByRegex {
      *
      * @param file is file to unzip
      */
-    private void unzip(File file) {
-        String fileNameWithOutExt = FilenameUtils.removeExtension(file.getAbsolutePath());
+    private static void unzip(@NotNull File file) {
+        String fileNameWithOutExt = FilenameUtils.removeExtension(
+                file.getAbsolutePath());
         File dir = new File(fileNameWithOutExt);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -58,7 +62,8 @@ public class UnzipByRegex {
                 if (entry.isDirectory()) {
                     entryFile.mkdirs();
                 } else {
-                    if (entryFile.getParentFile() != null && !entryFile.getParentFile().exists()) {
+                    if (entryFile.getParentFile() != null
+                            && !entryFile.getParentFile().exists()) {
                         entryFile.getParentFile().mkdirs();
                     }
                     if (!entryFile.exists()) {
@@ -80,8 +85,10 @@ public class UnzipByRegex {
      *
      * @param regex is regular expression to match file names
      */
-    public void extractFilesMatchesTheRegex(String regex) {
-        ArrayList<File> zipFiles = getZipFiles();
+    public static void extractFilesMatchesTheRegex(@NotNull String regex,
+                                                   @NotNull String path)
+            throws FileNotFoundException {
+        ArrayList<File> zipFiles = getZipFiles(path);
         for (File file : zipFiles) {
             if (!FilenameUtils.removeExtension(
                     file.getName()).matches(regex))

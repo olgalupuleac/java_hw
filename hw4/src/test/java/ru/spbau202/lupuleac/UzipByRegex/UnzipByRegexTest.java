@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.UzipByRegex;
 
-import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.*;
@@ -10,7 +10,8 @@ import static org.junit.Assert.*;
 public class UnzipByRegexTest {
     private String path = "src/test/resources/test_directory";
 
-    private String readFileToString(File file) throws Exception {
+    @NotNull
+    private String readFileToString(@NotNull File file) throws Exception {
         InputStream in = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder out = new StringBuilder();
@@ -24,8 +25,9 @@ public class UnzipByRegexTest {
     @Test
     public void emptyDirectory() throws Exception {
         String pathToEmpty = path + File.separator + "empty";
-        UnzipByRegex unzipper = new UnzipByRegex(pathToEmpty);
-        unzipper.extractFilesMatchesTheRegex("*");
+        File file = new File(pathToEmpty);
+        file.mkdirs();
+        UnzipByRegex.extractFilesMatchesTheRegex("*", pathToEmpty);
         File folder = new File(pathToEmpty);
         File[] listOfFiles = folder.listFiles();
         assertEquals(0, listOfFiles.length);
@@ -33,8 +35,7 @@ public class UnzipByRegexTest {
 
     @Test
     public void unzipOneFile() throws Exception {
-        UnzipByRegex unzipper = new UnzipByRegex(path);
-        unzipper.extractFilesMatchesTheRegex("1");
+        UnzipByRegex.extractFilesMatchesTheRegex("1", path);
         File file = new File(path + File.separator + "1"
                 + File.separator + "1.txt");
         assertEquals("Hello, flower!", readFileToString(file));
@@ -42,8 +43,7 @@ public class UnzipByRegexTest {
 
     @Test
     public void unzipOneSeveralFiles() throws Exception {
-        UnzipByRegex unzipper = new UnzipByRegex(path);
-        unzipper.extractFilesMatchesTheRegex("[0-9]*");
+        UnzipByRegex.extractFilesMatchesTheRegex("[0-9]*", path);
         File file1 = new File(path + File.separator + "1"
                 + File.separator + "1.txt");
         assertEquals("Hello, flower!", readFileToString(file1));
@@ -54,8 +54,7 @@ public class UnzipByRegexTest {
 
     @Test
     public void unzipArchiveContainsSeveralFiles() throws Exception {
-        UnzipByRegex unzipper = new UnzipByRegex(path);
-        unzipper.extractFilesMatchesTheRegex("A*");
+        UnzipByRegex.extractFilesMatchesTheRegex("A*", path);
         File file1 = new File(path + File.separator + "AAA"
                 + File.separator + "AAA" + File.separator + "A.txt");
         assertEquals("A", readFileToString(file1));
@@ -66,6 +65,12 @@ public class UnzipByRegexTest {
         assertEquals(1, folder.listFiles().length);
         File subfolder = new File(path + File.separator + "AAA" + File.separator + "AAA");
         assertEquals(2, subfolder.listFiles().length);
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void notExistedPath() throws Exception {
+        UnzipByRegex.extractFilesMatchesTheRegex("*",
+                path + File.separator + "notADir");
     }
 
 
