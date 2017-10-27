@@ -2,8 +2,7 @@ package ru.spbau202.lupuleac.Trie;
 
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 
 import static org.junit.Assert.*;
 
@@ -138,7 +137,7 @@ public class TrieTest {
             assertTrue(trie.contains(result.toString()));
         }
     }
-    
+
     @Test
     public void serializeAndDeserialize() throws Exception {
         Trie trie = new Trie();
@@ -163,6 +162,29 @@ public class TrieTest {
         trie.add(" α, ε, η, ι, ο, υ, ω");
         assertTrue(trie.contains("строчка с кириллицей"));
         assertTrue(trie.contains(" α, ε, η, ι, ο, υ, ω"));
+    }
+
+    @Test
+    public void serialize() throws Exception {
+        Trie trie = new Trie();
+        trie.add("a");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        trie.serialize(bos);
+        File file = new File("src/test/serializedTree.bin");
+        FileInputStream in = new FileInputStream(file);
+        byte fileContent[] = new byte[(int) file.length()];
+        in.read(fileContent);
+        assertArrayEquals(fileContent, bos.toByteArray());
+    }
+
+    @Test
+    public void deserialize() throws Exception {
+        File file = new File("src/test/serializedTree.bin");
+        FileInputStream in = new FileInputStream(file);
+        Trie trie = new Trie();
+        trie.deserialize(in);
+        assertTrue(trie.contains("a"));
+        assertEquals(1, trie.size());
     }
 
 
