@@ -138,7 +138,7 @@ public class TrieTest {
             assertTrue(trie.contains(result.toString()));
         }
     }
-
+    
     @Test
     public void serializeAndDeserialize() throws Exception {
         Trie trie = new Trie();

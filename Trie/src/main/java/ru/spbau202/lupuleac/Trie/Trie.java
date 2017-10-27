@@ -1,5 +1,7 @@
 package ru.spbau202.lupuleac.Trie;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
 
 /**
@@ -11,20 +13,6 @@ import java.io.*;
  * The data can be also serialized or deserialized.
  */
 public class Trie implements Serializable {
-
-    /**
-     * Class represents a vertex in a Trie,
-     * which keeps references to the next vertexes in the tree, a mark if it is an
-     * end of the element in the trie
-     * and number of elements which starts with the prefix relevant to this vertex.
-     */
-    private class Vertex implements Serializable {
-        private final int NUMBER_OF_CHARACTERS = 65536;
-        private Vertex[] next = new Vertex[NUMBER_OF_CHARACTERS];
-        private boolean isEndOfString;
-        private int howManyStartsWithPrefix;
-    }
-
     private Vertex root = new Vertex();
 
     /**
@@ -35,7 +23,7 @@ public class Trie implements Serializable {
      * @param element is the string to be added
      * @return true if the trie did not contain this element before
      */
-    public boolean add(String element) {
+    public boolean add(@NotNull String element) {
         if (contains(element)) {
             return false;
         }
@@ -62,7 +50,7 @@ public class Trie implements Serializable {
      * @param element the element whose presence in this trie is to be checked
      * @return true if this trie contains this element
      */
-    public boolean contains(String element) {
+    public boolean contains(@NotNull String element) {
         Vertex curVertex = root;
         for (char c : element.toCharArray()) {
             Vertex nextVertex = curVertex.next[c];
@@ -83,7 +71,7 @@ public class Trie implements Serializable {
      * @return true if this trie contains this element, false
      * otherwise
      */
-    public boolean remove(String element) {
+    public boolean remove(@NotNull String element) {
         if (!contains(element)) {
             return false;
         }
@@ -106,7 +94,7 @@ public class Trie implements Serializable {
      * @param prefix is given prefix
      * @return the number of words starting with the prefix
      */
-    public int howManyStartsWithPrefix(String prefix) {
+    public int howManyStartsWithPrefix(@NotNull String prefix) {
         Vertex curVertex = root;
         for (char c : prefix.toCharArray()) {
             Vertex nextVertex = curVertex.next[c];
@@ -132,9 +120,9 @@ public class Trie implements Serializable {
      * Writes the trie to the output stream.
      *
      * @param out is the output stream to write to
-     * @throws IOException
+     * @throws IOException if an I/O error occurs while writing stream header
      */
-    public void serialize(OutputStream out) throws IOException {
+    public void serialize(@NotNull OutputStream out) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
             oos.writeObject(this);
             oos.flush();
@@ -146,15 +134,28 @@ public class Trie implements Serializable {
      * Reads the trie from the input stream.
      *
      * @param in is the input stream to read from
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException            if an I/O error occurs while writing stream header
+     * @throws ClassNotFoundException if class of a serialized object cannot be found
      */
-    public void deserialize(InputStream in) throws IOException, ClassNotFoundException {
+    public void deserialize(@NotNull InputStream in) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(in)) {
             Trie newTrie = (Trie) ois.readObject();
             root = newTrie.root;
         }
 
+    }
+
+    /**
+     * Class represents a vertex in a Trie,
+     * which keeps references to the next vertexes in the tree, a mark if it is an
+     * end of the element in the trie
+     * and number of elements which starts with the prefix relevant to this vertex.
+     */
+    private static class Vertex implements Serializable {
+        private final int NUMBER_OF_CHARACTERS = 65536;
+        private Vertex[] next = new Vertex[NUMBER_OF_CHARACTERS];
+        private boolean isEndOfString;
+        private int howManyStartsWithPrefix;
     }
 
 }
