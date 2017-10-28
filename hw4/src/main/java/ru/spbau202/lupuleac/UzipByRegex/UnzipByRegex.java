@@ -21,6 +21,7 @@ public class UnzipByRegex {
      * To identify zip-file it checks its extension.
      *
      * @return the ArrayList containing files which might be zip-files
+     * @throws FileNotFoundException if the given path does not exist
      */
     @NotNull
     private static ArrayList<File> getZipFiles(
@@ -84,6 +85,7 @@ public class UnzipByRegex {
      * Extracts all zip files in the path which names without extension match the given regular expression.
      *
      * @param regex is regular expression to match file names
+     * @throws FileNotFoundException if the given path does not exist
      */
     public static void extractFilesMatchesTheRegex(@NotNull String regex,
                                                    @NotNull String path)
