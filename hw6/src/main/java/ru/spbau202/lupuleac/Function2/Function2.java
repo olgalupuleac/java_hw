@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.Function2;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;;
 import ru.spbau202.lupuleac.Function1.Function1;
 
 /**

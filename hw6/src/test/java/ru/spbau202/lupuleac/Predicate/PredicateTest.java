@@ -1,8 +1,6 @@
 package ru.spbau202.lupuleac.Predicate;
 
-import com.sun.istack.internal.NotNull;
 import org.junit.Test;
-import ru.spbau202.lupuleac.Collections.Collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +17,7 @@ public class PredicateTest {
     public void orFalse() throws Exception {
         assertFalse((new StartsWithA()).or(new IsAQuestion()).apply("Olga"));
     }
+
 
     @Test
     public void andTrue() throws Exception {
@@ -42,6 +41,16 @@ public class PredicateTest {
             list.add(i);
 
         }
+    }
+
+    @Test
+    public void alwaysTrue() throws Exception {
+        assertTrue(Predicate.ALWAYS_TRUE().apply(5));
+    }
+
+    @Test
+    public void alwaysFalse() throws Exception {
+        assertFalse(Predicate.ALWAYS_FALSE().apply("hello"));
     }
 
     public static class StartsWithA implements Predicate<String> {

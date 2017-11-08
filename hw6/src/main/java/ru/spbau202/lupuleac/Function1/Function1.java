@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.Function1;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;;
 
 /**
  * Interface which represents a function with one parameter.

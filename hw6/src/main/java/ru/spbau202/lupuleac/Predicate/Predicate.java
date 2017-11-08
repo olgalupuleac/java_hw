@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.Predicate;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;;
 import ru.spbau202.lupuleac.Function1.Function1;
 
 /**
@@ -10,12 +10,16 @@ public interface Predicate<T> extends Function1<T, Boolean> {
     /**
      * Predicate which returns true regardless of its argument.
      */
-    Predicate<Object> ALWAYS_TRUE = o -> true;
+    static <T> Predicate<T> ALWAYS_TRUE() {
+        return o -> true;
+    }
 
     /**
      * Predicate which returns false regardless of its argument.
      */
-    Predicate<Object> ALWAYS_FALSE = o -> false;
+    static <T> Predicate<T> ALWAYS_FALSE() {
+        return o -> false;
+    }
 
     /**
      * Returns predicate which result is true if either of this and given predicates is true.
