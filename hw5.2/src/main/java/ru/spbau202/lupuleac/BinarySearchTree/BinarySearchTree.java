@@ -1,11 +1,6 @@
 package ru.spbau202.lupuleac.BinarySearchTree;
 
-import com.sun.istack.internal.NotNull;
-
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Unbalanced binary search tree (BST) containing comparable elements.
