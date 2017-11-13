@@ -1,7 +1,7 @@
 package ru.spbau202.lupuleac;
 
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.Maybe.Maybe;
 
 import java.io.*;
@@ -77,9 +77,9 @@ public class Main {
                 String line = reader.nextLine();
                 try {
                     Integer i = Integer.valueOf(line);
-                    result.add(new Maybe<>(i));
+                    result.add(Maybe.just(i));
                 } catch (NumberFormatException e) {
-                    result.add(new Maybe<Integer>());
+                    result.add(Maybe.nothing());
                 }
             }
         }

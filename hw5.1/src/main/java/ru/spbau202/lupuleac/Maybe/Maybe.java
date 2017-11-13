@@ -1,7 +1,8 @@
 package ru.spbau202.lupuleac.Maybe;
 
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -14,11 +15,11 @@ public class Maybe<T> {
     private T value;
     private boolean nothing;
 
-    public Maybe(@Nullable T t) {
+    private Maybe(@Nullable T t) {
         value = t;
     }
 
-    public Maybe() {
+    private Maybe() {
         nothing = true;
     }
 
@@ -29,7 +30,7 @@ public class Maybe<T> {
      * @param <T> is the type of the given element and the generic type of this member of the class.
      * @return new member of the class containing t as a value.
      */
-    public static <T> Maybe<T> just(T t) {
+    public static <T> Maybe<T> just(@Nullable T t) {
         return new Maybe<>(t);
     }
 
@@ -74,9 +75,9 @@ public class Maybe<T> {
      * @return Maybe containing the result of this function applied to the value
      * or Nothing if this Maybe is nothing.
      */
-    public <U> Maybe<U> map(Function<? super T, ? extends U> mapper) {
+    public <U> Maybe<U> map(@NotNull Function<? super T, ? extends U> mapper) {
         if (nothing) {
-            return new Maybe<>();
+            return nothing();
         }
         return new Maybe<>(mapper.apply(value));
     }
