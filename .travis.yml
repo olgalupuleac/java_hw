@@ -5,4 +5,4 @@ os:
   - linux
 script:
   - chmod +x build_project.sh
-  - build_project.sh
+  - ./build_project.sh
