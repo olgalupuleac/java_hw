@@ -4,6 +4,5 @@ jdk:
 os:
   - linux
 script:
-  - cd hw4
-  - chmod +x gradlew
-  - ./gradlew build
+  - chmod +x build_project.sh
+  - ./build_project.sh
