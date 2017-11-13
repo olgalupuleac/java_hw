@@ -1,2 +1,8 @@
-cd hw4
-./gradlew build
+language: java
+jdk:
+  - oraclejdk8
+os:
+  - linux
+script:
+  - cd hw4
+  - ./gradlew build
