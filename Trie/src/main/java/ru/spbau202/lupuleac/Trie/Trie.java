@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.Trie;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
