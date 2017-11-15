@@ -350,7 +350,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int) tree.descendingSet().lower(3));
+        assertEquals(5, (int) tree.descendingSet().lower(3));
     }
 
     @Test
@@ -380,7 +380,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int) tree.descendingSet().floor(3));
+        assertEquals(5, (int) tree.descendingSet().floor(3));
     }
 
     @Test
@@ -410,7 +410,7 @@ public class TreeSetTest {
         tree.add(11);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int) tree.descendingSet().ceiling(3));
+        assertEquals(2, (int) tree.descendingSet().ceiling(3));
     }
 
     @Test
@@ -440,7 +440,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int) tree.descendingSet().higher(3));
+        assertEquals(2, (int) tree.descendingSet().higher(3));
     }
 
     @Test
@@ -492,5 +492,21 @@ public class TreeSetTest {
         assertEquals(12, (int) iterator.next());
         assertFalse(iterator.hasNext());
     }
+
+    @Test
+    public void elementWhichIsGreaterOrLess() throws Exception {
+        TreeSet<Integer> tree = new TreeSet<>();
+        tree.add(8);
+        tree.add(4);
+        tree.add(12);
+        tree.add(6);
+        tree.add(2);
+        tree.add(10);
+        assertNull(tree.lower(2));
+        assertNull(tree.floor(1));
+        assertNull(tree.ceiling(15));
+        assertNull(tree.higher(12));
+    }
+
 
 }

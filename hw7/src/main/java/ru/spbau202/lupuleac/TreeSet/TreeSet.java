@@ -101,7 +101,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             }
             return left.lower(e);
         }
-        return descendingSet().lower(e);
+        return descendingSet().higher(e);
     }
 
     /**
@@ -128,7 +128,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             }
             return left.floor(e);
         }
-        return descendingSet().floor(e);
+        return descendingSet().ceiling(e);
     }
 
     /**
@@ -155,7 +155,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             }
             return right.ceiling(e);
         }
-        return descendingSet().ceiling(e);
+        return descendingSet().floor(e);
     }
 
     /**
@@ -181,9 +181,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                 return null;
             }
             return right.higher(e);
-        } else {
-            return descendingSet().higher(e);
         }
+        return descendingSet().lower(e);
+
     }
 
     /**
