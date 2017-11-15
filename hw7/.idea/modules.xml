@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TreeSet.iml" filepath="$PROJECT_DIR$/.idea/modules/TreeSet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TreeSet_main.iml" filepath="$PROJECT_DIR$/.idea/modules/TreeSet_main.iml" group="TreeSet" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TreeSet_test.iml" filepath="$PROJECT_DIR$/.idea/modules/TreeSet_test.iml" group="TreeSet" />
+    </modules>
+  </component>
+</project>
