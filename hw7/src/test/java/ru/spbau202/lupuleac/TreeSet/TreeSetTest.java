@@ -290,7 +290,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.first());
+        assertEquals(2, (int) tree.first());
     }
 
     @Test
@@ -300,7 +300,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(10, (int)tree.last());
+        assertEquals(10, (int) tree.last());
     }
 
     @Test
@@ -310,7 +310,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(10, (int)tree.descendingSet().first());
+        assertEquals(10, (int) tree.descendingSet().first());
     }
 
     @Test
@@ -320,7 +320,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.descendingSet().last());
+        assertEquals(2, (int) tree.descendingSet().last());
     }
 
     @Test
@@ -330,7 +330,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.lower(5));
+        assertEquals(2, (int) tree.lower(5));
     }
 
     @Test
@@ -340,8 +340,9 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.lower(3));
+        assertEquals(2, (int) tree.lower(3));
     }
+
     @Test
     public void descendingLower() throws Exception {
         TreeSet<Integer> tree = new TreeSet<>();
@@ -349,7 +350,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.descendingSet().lower(3));
+        assertEquals(2, (int) tree.descendingSet().lower(3));
     }
 
     @Test
@@ -359,7 +360,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.floor(5));
+        assertEquals(5, (int) tree.floor(5));
     }
 
     @Test
@@ -369,8 +370,9 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.floor(3));
+        assertEquals(2, (int) tree.floor(3));
     }
+
     @Test
     public void descendingFloor() throws Exception {
         TreeSet<Integer> tree = new TreeSet<>();
@@ -378,7 +380,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(2, (int)tree.descendingSet().floor(3));
+        assertEquals(2, (int) tree.descendingSet().floor(3));
     }
 
     @Test
@@ -388,7 +390,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.ceiling(5));
+        assertEquals(5, (int) tree.ceiling(5));
     }
 
     @Test
@@ -398,8 +400,9 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.ceiling(3));
+        assertEquals(5, (int) tree.ceiling(3));
     }
+
     @Test
     public void descendingCeiling() throws Exception {
         TreeSet<Integer> tree = new TreeSet<>();
@@ -407,7 +410,7 @@ public class TreeSetTest {
         tree.add(11);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.descendingSet().ceiling(3));
+        assertEquals(5, (int) tree.descendingSet().ceiling(3));
     }
 
     @Test
@@ -417,7 +420,7 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(7, (int)tree.higher(5));
+        assertEquals(7, (int) tree.higher(5));
     }
 
     @Test
@@ -427,8 +430,9 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.higher(3));
+        assertEquals(5, (int) tree.higher(3));
     }
+
     @Test
     public void higherCeiling() throws Exception {
         TreeSet<Integer> tree = new TreeSet<>();
@@ -436,11 +440,11 @@ public class TreeSetTest {
         tree.add(10);
         tree.add(5);
         tree.add(2);
-        assertEquals(5, (int)tree.descendingSet().higher(3));
+        assertEquals(5, (int) tree.descendingSet().higher(3));
     }
 
     @Test
-    public void comparator() throws Exception{
+    public void comparator() throws Exception {
         TreeSet<Integer> tree = new TreeSet<>((x, y) -> y - x);
         tree.add(8);
         tree.add(4);

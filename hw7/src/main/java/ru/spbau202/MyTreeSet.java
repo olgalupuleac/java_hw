@@ -7,30 +7,46 @@ import java.util.TreeSet;
 
 public interface MyTreeSet<E> extends Set<E> {
 
-    /** {@link TreeSet#descendingIterator()} **/
+    /**
+     * {@link TreeSet#descendingIterator()}
+     **/
     Iterator<E> descendingIterator();
 
-    /** {@link TreeSet#descendingSet()} **/
+    /**
+     * {@link TreeSet#descendingSet()}
+     **/
     MyTreeSet<E> descendingSet();
 
 
-    /** {@link TreeSet#first()} **/
+    /**
+     * {@link TreeSet#first()}
+     **/
     E first();
 
-    /** {@link TreeSet#last()} **/
+    /**
+     * {@link TreeSet#last()}
+     **/
     E last();
 
 
-    /** {@link TreeSet#lower(Object)} **/
+    /**
+     * {@link TreeSet#lower(Object)}
+     **/
     E lower(E e);
 
-    /** {@link TreeSet#floor(Object)} **/
+    /**
+     * {@link TreeSet#floor(Object)}
+     **/
     E floor(E e);
 
 
-    /** {@link TreeSet#ceiling(Object)} **/
+    /**
+     * {@link TreeSet#ceiling(Object)}
+     **/
     E ceiling(E e);
 
-    /** {@link TreeSet#higher(Object)} **/
+    /**
+     * {@link TreeSet#higher(Object)}
+     **/
     E higher(E e);
 }

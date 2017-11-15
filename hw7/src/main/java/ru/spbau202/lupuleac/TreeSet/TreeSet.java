@@ -44,7 +44,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     @NotNull
     @Override
     public Iterator<E> descendingIterator() {
-        return new TreeSetIterator(! descending);
+        return new TreeSetIterator(!descending);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     @Override
     public MyTreeSet<E> descendingSet() {
         TreeSet<E> result = new TreeSet<>(comparator);
-        result.descending = ! descending;
+        result.descending = !descending;
         result.elem = elem;
         result.left = left;
         result.right = right;
@@ -82,21 +82,21 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     @Override
     public E lower(@NotNull E e) {
-        if(elem == null){
+        if (elem == null) {
             return null;
         }
-        if(! descending){
-            if(comparator.compare(elem, e) < 0){
+        if (!descending) {
+            if (comparator.compare(elem, e) < 0) {
                 E rightRes = null;
-                if(right != null){
+                if (right != null) {
                     rightRes = right.lower(e);
                 }
-                if(rightRes == null){
+                if (rightRes == null) {
                     return elem;
                 }
                 return rightRes;
             }
-            if(left == null){
+            if (left == null) {
                 return null;
             }
             return left.lower(e);
@@ -109,21 +109,21 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     @Override
     public E floor(@NotNull E e) {
-        if(elem == null){
+        if (elem == null) {
             return null;
         }
-        if(! descending){
-            if(comparator.compare(elem, e) <= 0){
+        if (!descending) {
+            if (comparator.compare(elem, e) <= 0) {
                 E rightRes = null;
-                if(right != null){
+                if (right != null) {
                     rightRes = right.floor(e);
                 }
-                if(rightRes == null){
+                if (rightRes == null) {
                     return elem;
                 }
                 return rightRes;
             }
-            if(left == null){
+            if (left == null) {
                 return null;
             }
             return left.floor(e);
@@ -136,21 +136,21 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     @Override
     public E ceiling(@NotNull E e) {
-        if(elem == null){
+        if (elem == null) {
             return null;
         }
-        if(! descending){
-            if(comparator.compare(elem, e) >= 0){
+        if (!descending) {
+            if (comparator.compare(elem, e) >= 0) {
                 E leftRes = null;
-                if(left != null){
+                if (left != null) {
                     leftRes = left.ceiling(e);
                 }
-                if(leftRes == null){
+                if (leftRes == null) {
                     return elem;
                 }
                 return leftRes;
             }
-            if(right == null){
+            if (right == null) {
                 return null;
             }
             return right.ceiling(e);
@@ -163,26 +163,25 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     @Override
     public E higher(@NotNull E e) {
-        if(elem == null){
+        if (elem == null) {
             return null;
         }
-        if(! descending){
-            if(comparator.compare(elem, e) > 0) {
+        if (!descending) {
+            if (comparator.compare(elem, e) > 0) {
                 E leftRes = null;
-                if(left != null){
+                if (left != null) {
                     leftRes = left.higher(e);
                 }
-                if(leftRes == null){
+                if (leftRes == null) {
                     return elem;
                 }
                 return leftRes;
             }
-            if(right == null){
+            if (right == null) {
                 return null;
             }
             return right.higher(e);
-        }
-        else{
+        } else {
             return descendingSet().higher(e);
         }
     }
@@ -209,7 +208,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean contains(@NotNull Object o) {
-        if(elem == null){
+        if (elem == null) {
             return false;
         }
         if (elem.equals(o)) {
@@ -243,7 +242,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return false;
         }
         size++;
-        if(elem == null){
+        if (elem == null) {
             elem = e;
             return true;
         }
@@ -292,10 +291,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                 return true;
             }
             if (right == null) {
-                if(parent == null){
+                if (parent == null) {
                     elem = left.elem;
-                }
-                else{
+                } else {
                     parent.left = left;
                 }
                 left.parent = parent;
@@ -324,7 +322,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                     current = current.left;
                 }
             } else {
-                while(current.right != null) {
+                while (current.right != null) {
                     current = current.right;
                 }
             }
@@ -357,7 +355,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                             current.elem, current.parent.elem) < 0)) {
                         current = current.parent;
                     }
-                    if(current != null){
+                    if (current != null) {
                         current = current.parent;
                     }
                 }
@@ -366,12 +364,12 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                     current = ((TreeSetIterator) current.right.iterator()).current;
                     return res;
                 } else {
-                    while (current != null &&(current.parent == null
+                    while (current != null && (current.parent == null
                             || TreeSet.this.comparator.compare(
                             current.elem, current.parent.elem) > 0)) {
                         current = current.parent;
                     }
-                    if(current != null){
+                    if (current != null) {
                         current = current.parent;
                     }
                 }
