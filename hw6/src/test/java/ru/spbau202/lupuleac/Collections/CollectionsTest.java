@@ -8,7 +8,7 @@ import ru.spbau202.lupuleac.Predicate.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CollectionsTest {
     @Test

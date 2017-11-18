@@ -82,6 +82,4 @@ public class Function2Test {
         }
     }
 
-    //TODO test with null, test with classes that extend each other
-
 }

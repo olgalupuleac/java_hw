@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.Collections;
 
-import org.jetbrains.annotations.NotNull;;
+import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.Function1.Function1;
 import ru.spbau202.lupuleac.Function2.Function2;
 import ru.spbau202.lupuleac.Predicate.Predicate;
@@ -8,6 +8,8 @@ import ru.spbau202.lupuleac.Predicate.Predicate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+;
 
 /**
  * Implements some methods which could be applied to the collections.
@@ -87,14 +89,7 @@ public class Collections {
     @NotNull
     public static <E> List<E> takeUntil(@NotNull Predicate<? super E> p,
                                         @NotNull Collection<E> collection) {
-        List<E> list = new ArrayList<>();
-        for (E t : collection) {
-            if (p.apply(t)) {
-                break;
-            }
-            list.add(t);
-        }
-        return list;
+        return takeWhile(x -> !p.apply(x), collection);
     }
 
     /**
