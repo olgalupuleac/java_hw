@@ -152,7 +152,6 @@ public class TrieTest {
         assertTrue(anotherTrie.contains("first"));
         assertTrue(anotherTrie.contains("second"));
         assertTrue(anotherTrie.contains("third"));
-
     }
 
     @Test
@@ -170,19 +169,16 @@ public class TrieTest {
         trie.add("a");
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         trie.serialize(bos);
-        File file = new File("src/test/serializedTree.bin");
-        FileInputStream in = new FileInputStream(file);
-        byte fileContent[] = new byte[(int) file.length()];
-        in.read(fileContent);
-        assertArrayEquals(fileContent, bos.toByteArray());
+        String expected = "0 97 1 65536 65536 ";
+        assertEquals(expected, bos.toString());
     }
 
     @Test
     public void deserialize() throws Exception {
-        File file = new File("src/test/serializedTree.bin");
-        FileInputStream in = new FileInputStream(file);
+        String expected = "0 97 1 65536 65536 ";
         Trie trie = new Trie();
-        trie.deserialize(in);
+        ByteArrayInputStream bis = new ByteArrayInputStream(expected.getBytes());
+        trie.deserialize(bis);
         assertTrue(trie.contains("a"));
         assertEquals(1, trie.size());
     }
