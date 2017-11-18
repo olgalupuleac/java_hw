@@ -30,6 +30,7 @@ public class Maybe<T> {
      * @param <T> is the type of the given element and the generic type of this member of the class.
      * @return new member of the class containing t as a value.
      */
+    @NotNull
     public static <T> Maybe<T> just(@Nullable T t) {
         return new Maybe<>(t);
     }
@@ -40,6 +41,7 @@ public class Maybe<T> {
      * @param <T> is the generic type of this member and the generic type of returning value
      * @return new Maybe containing Nothing.
      */
+    @NotNull
     public static <T> Maybe<T> nothing() {
         return new Maybe<>();
     }
@@ -50,6 +52,7 @@ public class Maybe<T> {
      * @return the value relevant to this Maybe.
      * @throws AccessToNothingException if Maybe is Nothing.
      */
+    @Nullable
     public T get() throws AccessToNothingException {
         if (nothing) {
             throw new AccessToNothingException();
@@ -75,6 +78,7 @@ public class Maybe<T> {
      * @return Maybe containing the result of this function applied to the value
      * or Nothing if this Maybe is nothing.
      */
+    @NotNull
     public <U> Maybe<U> map(@NotNull Function<? super T, ? extends U> mapper) {
         if (nothing) {
             return nothing();

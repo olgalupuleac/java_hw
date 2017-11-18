@@ -5,5 +5,5 @@ package ru.spbau202.lupuleac.Maybe;
  *
  * @see Maybe#get()
  */
-public class AccessToNothingException extends RuntimeException {
+public class AccessToNothingException extends Exception {
 }

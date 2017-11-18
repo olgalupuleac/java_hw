@@ -2,6 +2,7 @@ package ru.spbau202.lupuleac;
 
 
 import org.jetbrains.annotations.NotNull;
+import ru.spbau202.lupuleac.Maybe.AccessToNothingException;
 import ru.spbau202.lupuleac.Maybe.Maybe;
 
 import java.io.*;
@@ -100,9 +101,9 @@ public class Main {
             throws FileNotFoundException {
         try (PrintStream writer = new PrintStream(file)) {
             for (Maybe<Integer> i : maybes) {
-                if (i.isPresent()) {
+                try {
                     writer.println(i.get().toString());
-                } else {
+                } catch (AccessToNothingException e) {
                     writer.println("null");
                 }
             }
