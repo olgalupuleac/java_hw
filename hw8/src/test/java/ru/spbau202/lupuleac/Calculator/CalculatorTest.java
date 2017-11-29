@@ -1,16 +1,25 @@
 package ru.spbau202.lupuleac.Calculator;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import ru.spbau202.lupuleac.Stack.Stack;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CalculatorTest {
+    private Stack<Integer> mockedValues;
+    private Stack<Character> mockedOperators;
+    private Calculator calculator;
+
     @SuppressWarnings("unchecked")
-    private Stack<Integer> mockedValues = mock(Stack.class);
-    @SuppressWarnings("unchecked")
-    private Stack<Character> mockedOperators = mock(Stack.class);
+    @Before
+    public void setUp() {
+        mockedValues = mock(Stack.class);
+        mockedOperators = mock(Stack.class);
+        calculator = new Calculator(mockedValues, mockedOperators);
+    }
 
     @Test
     public void parseInputToPolishNotation() throws Exception {
@@ -21,9 +30,17 @@ public class CalculatorTest {
                 .thenReturn('+', '(');
         when(mockedOperators.top())
                 .thenReturn('(', '+', '(');
-        Calculator calculator = new Calculator(mockedValues, mockedOperators);
-        assertEquals("0 1 +", calculator.parseInputToPolishNotation(expression));
-
+        assertEquals("0 1 +",
+                calculator.parseInputToPolishNotation(expression));
+        InOrder inOrder = inOrder(mockedOperators);
+        inOrder.verify(mockedOperators).clear();
+        inOrder.verify(mockedOperators).push('(');
+        inOrder.verify(mockedOperators).isEmpty();
+        inOrder.verify(mockedOperators).push('+');
+        inOrder.verify(mockedOperators).isEmpty();
+        inOrder.verify(mockedOperators).pop();
+        inOrder.verify(mockedOperators).isEmpty();
+        inOrder.verify(mockedOperators).pop();
     }
 
     @Test
@@ -36,19 +53,29 @@ public class CalculatorTest {
         when(mockedOperators.top())
                 .thenReturn('(', '+', '(');
         Calculator calculator = new Calculator(mockedValues, mockedOperators);
-        assertEquals("42 56 +", calculator.parseInputToPolishNotation(expression));
+        assertEquals("42 56 +",
+                calculator.parseInputToPolishNotation(expression));
     }
 
     @Test
     public void calculate() throws Exception {
+        String expression = "1 0 -";
+        when(mockedValues.pop())
+                .thenReturn(0, 1, 1);
+        assertEquals(1, calculator.calculate(expression));
+        InOrder inOrder = inOrder(mockedValues);
+        inOrder.verify(mockedValues).clear();
+        inOrder.verify(mockedValues).push(1);
+        inOrder.verify(mockedValues).push(0);
+        inOrder.verify(mockedValues).push(1);
     }
 
     @Test
     public void parseInputWithoutMock() throws Exception {
         Calculator calculator = new Calculator(new Stack<>(), new Stack<>());
-        String expression = "(5 + 7) * 12 + 4";
-        System.out.println(calculator.parseInputToPolishNotation(expression));
-        assertEquals(148, calculator.calculate("5 7 + 12 * 4 +"));
+        String expression = "7 * (1 - 1)";
+        assertEquals(0, calculator.
+                calculate(calculator.parseInputToPolishNotation(expression)));
     }
 
 }

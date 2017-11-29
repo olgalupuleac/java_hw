@@ -27,17 +27,17 @@ public class StackTest {
     public void push() throws Exception {
         Stack<Character> stack = new Stack<>();
         stack.push('a');
-        assertEquals('a', (char)stack.top());
+        assertEquals('a', (char) stack.top());
     }
 
     @Test
     public void capacity() throws Exception {
         Stack<Integer> stack = new Stack<>();
-        for(int i = 0; i < 42; i++){
+        for (int i = 0; i < 42; i++) {
             stack.push(i);
         }
-        for(int i = 41; i >= 0; i--){
-            assertEquals(i, (int)stack.pop());
+        for (int i = 41; i >= 0; i--) {
+            assertEquals(i, (int) stack.pop());
         }
     }
 
@@ -45,11 +45,14 @@ public class StackTest {
     public void top() throws Exception {
         Stack<Character> stack = new Stack<>();
         stack.push('(');
-        assertEquals('(', (char)stack.top());
+        assertEquals('(', (char) stack.top());
     }
 
     @Test
     public void pop() throws Exception {
+        Stack<Character> stack = new Stack<>();
+        stack.push('r');
+        assertEquals('r', (char) stack.pop());
     }
 
     @Test
