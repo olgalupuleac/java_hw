@@ -7,12 +7,19 @@ package ru.spbau202.lupuleac.HashTable;
  * and resolves collisions using separate chaining method.
  */
 public class HashTable {
-    private static final int INITIAL_CAPACITY = (int) 1e6 + 7;
+    private static final int INITIAL_CAPACITY = 1000;
     private int size = 0;
     private CollisionList[] array = new CollisionList[INITIAL_CAPACITY];
 
+    /**
+     * Gets position in the array using String.hashCode.
+     *
+     * @param key
+     * @return
+     * @see String#hashCode()
+     */
     private int hash(String key) {
-        return key.hashCode() % array.length;
+        return (key.hashCode() % array.length + array.length) % array.length;
     }
 
     /**
@@ -31,8 +38,7 @@ public class HashTable {
      * @return true if this hash table contains a mapping for the specified key, false otherwise
      */
     public boolean contains(String key) {
-        int arrayIndex = hash(key);
-        return array[arrayIndex] != null && array[arrayIndex].get(key) != null;
+        return get(key) != null;
     }
 
     /**
@@ -56,17 +62,18 @@ public class HashTable {
      */
     private void rebuild() {
         if (0.75 * array.length < size) {
-            CollisionList[] newArray = new CollisionList[2 * array.length + 1];
-            for (CollisionList list : array) {
+            CollisionList[] oldArray = array;
+            CollisionList[] array = new CollisionList[2 * oldArray.length + 1];
+            for (CollisionList list : oldArray) {
                 if (list == null) {
                     continue;
                 }
                 CollisionList.Node listIterator = list.getHead();
                 while (listIterator != null) {
                     int newArrayIndex = hash(listIterator.getKey());
-                    if (newArray[newArrayIndex] == null)
-                        newArray[newArrayIndex] = new CollisionList();
-                    newArray[newArrayIndex].add(listIterator.getKey(),
+                    if (array[newArrayIndex] == null)
+                        array[newArrayIndex] = new CollisionList();
+                    array[newArrayIndex].add(listIterator.getKey(),
                             listIterator.getValue());
                     listIterator = listIterator.getNext();
                 }
