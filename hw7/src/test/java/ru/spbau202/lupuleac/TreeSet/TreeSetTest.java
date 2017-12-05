@@ -507,6 +507,4 @@ public class TreeSetTest {
         assertNull(tree.ceiling(15));
         assertNull(tree.higher(12));
     }
-
-
 }
