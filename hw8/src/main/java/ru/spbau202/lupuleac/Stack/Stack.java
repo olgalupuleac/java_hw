@@ -1,5 +1,7 @@
 package ru.spbau202.lupuleac.Stack;
 
+import java.util.EmptyStackException;
+
 /**
  * The Stack class represents a last-in-first-out (LIFO) stack of objects.
  * The usual push and pop operations are provided,
@@ -65,7 +67,10 @@ public class Stack<T> {
      *
      * @return the object at the top of this stack to be removed
      */
-    public T pop() {
+    public T pop() throws EmptyStackException {
+        if(size == 0){
+            throw new EmptyStackException();
+        }
         return data[--size];
     }
 

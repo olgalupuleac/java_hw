@@ -2,6 +2,8 @@ package ru.spbau202.lupuleac.Stack;
 
 import org.junit.Test;
 
+import java.util.EmptyStackException;
+
 import static org.junit.Assert.*;
 
 public class StackTest {
@@ -57,6 +59,16 @@ public class StackTest {
 
     @Test
     public void clear() throws Exception {
+        Stack<Character> stack = new Stack<>();
+        stack.push('r');
+        stack.clear();
+        assertTrue(stack.isEmpty());
+    }
+
+    @Test(expected = EmptyStackException.class)
+    public void popEmptyStack() throws Exception {
+        Stack<Character> stack = new Stack<>();
+        stack.pop();
     }
 
 }
