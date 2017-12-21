@@ -17,8 +17,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public TreeSet() {
-        tree = new Tree<>();
+        tree = new Tree<>((e1, e2) -> ((Comparable<E>) e1).compareTo(e2));
     }
 
     /**
@@ -166,10 +167,6 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         private Comparator<? super E> comparator;
         private int size;
 
-        @SuppressWarnings("unchecked")
-        public Tree() {
-            comparator = (Comparator<E>) (e1, e2) -> ((Comparable<E>) e1).compareTo(e2);
-        }
 
         public Tree(@NotNull Comparator<? super E> comparator) {
             this.comparator = comparator;
