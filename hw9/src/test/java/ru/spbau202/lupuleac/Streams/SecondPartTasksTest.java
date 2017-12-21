@@ -33,8 +33,6 @@ public class SecondPartTasksTest {
         expected.add("Everything is dust in the wind");
         expected.add("The wind");
         //second file
-        expected.add("Winds were moving fast");
-        expected.add("Winds that wouldn't wait");
         expected.add("Howling winds and the raging waves");
         //third file
         for(int i = 0; i < 4; i++){

@@ -29,7 +29,7 @@ public final class SecondPartTasks {
                         return Stream.empty();
                     }
                 }).map(Object::toString)
-                .filter(x -> x.toLowerCase().contains(
+                .filter(x -> x.contains(
                         sequence.toString().toLowerCase())
                 ).collect(Collectors.toList());
     }
