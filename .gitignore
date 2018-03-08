@@ -24,7 +24,7 @@ hs_err_pid*
 **/.gradle/
 **/.idea/tasks.xml
 **/.idea/workspace.xml
-**/.idea/checkstyle.xml
+**/.idea/checkstyle-idea.xml
 **/.idea/libraries
 **/build/
 **/out/
