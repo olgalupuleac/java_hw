@@ -6,6 +6,7 @@ do
     if test -d $FILE
     then
       cd "$FILE"
+      echo "$FILE"
       chmod +x gradlew
       ./gradlew build
    fi
