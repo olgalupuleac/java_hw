@@ -18,7 +18,9 @@ import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
 import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 import ru.spbau202.lupuleac.TicTacToe.Logic.Statistics;
 
-
+/**
+ * Class which launches the application and represents the user interface.
+ */
 public class UI extends Application {
     private Stage window;
     private Board board = new Board();
@@ -161,9 +163,7 @@ public class UI extends Application {
             getChildren().addAll(border, sign);
             setTranslateX(x * 200);
             setTranslateY(y * 200);
-            setOnMouseClicked(event -> {
-                move();
-            });
+            setOnMouseClicked(event -> move());
         }
 
         private void move(){

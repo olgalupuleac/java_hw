@@ -1,6 +1,7 @@
 package ru.spbau202.lupuleac.TicTacToe.Bot;
 
 
+import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 
 
@@ -15,6 +16,7 @@ public class MiniMaxBot extends Bot {
     }
 
     @Override
+    @NotNull
     public Move makeMove(Board board) {
         miniMax(board, 0);
         return bestMove;
