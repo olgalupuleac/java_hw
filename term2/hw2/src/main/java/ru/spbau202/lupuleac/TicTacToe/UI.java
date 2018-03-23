@@ -15,6 +15,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
+import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
+import ru.spbau202.lupuleac.TicTacToe.Logic.Statistics;
 
 
 public class UI extends Application {
@@ -24,6 +26,7 @@ public class UI extends Application {
     private Pane root;
     private Box[][] grid;
     private Settings settings = new Settings();
+    private Statistics statistics = new Statistics();
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -42,21 +45,21 @@ public class UI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        window.setTitle("Choose play mode");
         primaryStage.setScene(choosePlayMode());
         primaryStage.show();
     }
 
     @NotNull
     private Scene choosePlayMode(){
+        window.setTitle("Choose play mode");
         Pane root = new Pane();
-        root.setPrefSize(200, 200);
+        root.setPrefSize(300, 300);
         Button hotSeat = new Button("Play with friend");
-        hotSeat.setLayoutX(40);
-        hotSeat.setLayoutY(70);
+        hotSeat.setLayoutX(140);
+        hotSeat.setLayoutY(130);
         Button gameWithBot = new Button("Play with bot");
-        gameWithBot.setLayoutX(40);
-        gameWithBot.setLayoutY(30);
+        gameWithBot.setLayoutX(140);
+        gameWithBot.setLayoutY(90);
         gameWithBot.setOnAction(e -> {
             settings.setPlayMode(Settings.PlayMode.BOT);
             window.setTitle("Choose bot level");
@@ -66,20 +69,38 @@ public class UI extends Application {
             settings.setPlayMode(Settings.PlayMode.HOT_SEAT);
             window.setScene(createContent());
         });
-        root.getChildren().addAll(gameWithBot, hotSeat);
+        Button showGameStatistics = new Button("Show game statistics");
+        showGameStatistics.setLayoutX(140);
+        showGameStatistics.setLayoutY(170);
+        showGameStatistics.setOnAction(e -> window.setScene(showStatistics()));
+        root.getChildren().addAll(gameWithBot, hotSeat, showGameStatistics);
+        return new Scene(root);
+    }
+
+    @NotNull
+    private Scene showStatistics(){
+        Pane root = new Pane();
+        root.setPrefSize(600, 600);
+        Label label = new Label(statistics.showStatistics());
+        Button restart = new Button("Restart");
+        restart.setAlignment(Pos.BOTTOM_CENTER);
+        restart.setLayoutX(270);
+        restart.setLayoutY(30);
+        restart.setOnAction(e -> restart());
+        root.getChildren().addAll(label, restart);
         return new Scene(root);
     }
 
     @NotNull
     private Scene chooseBotLevel(){
         Pane root = new Pane();
-        root.setPrefSize(400, 400);
+        root.setPrefSize(200, 200);
         Button bot1 = new Button("Easy");
-        bot1.setLayoutX(200);
-        bot1.setLayoutY(300);
+        bot1.setLayoutX(40);
+        bot1.setLayoutY(70);
         Button bot2 = new Button("Hard");
-        bot2.setLayoutX(200);
-        bot2.setLayoutY(100);
+        bot2.setLayoutX(40);
+        bot2.setLayoutY(30);
         bot2.setOnAction(e -> {
             settings.setBotLevel(2);
             window.setScene(createContent());
@@ -95,10 +116,20 @@ public class UI extends Application {
 
     @NotNull
     private Scene createContent() {
+        window.setTitle("Game");
         root = new Pane();
         root.setPrefSize(600, 600);
         drawGrid();
+        Button restart = new Button("Restart");
+        restart.setOnAction(e -> restart());
+        root.getChildren().addAll(restart);
         return new Scene(root);
+    }
+
+    private void restart() {
+        statistics.increment(board.getGameStatus());
+        board.clear();
+        window.setScene(choosePlayMode());
     }
 
     public static void main(String[] args){
@@ -145,12 +176,17 @@ public class UI extends Application {
             if(board.getGameStatus() != Board.GameStatus.GAME_CONTINUES){
                 UI.this.displayResult();
             }
-            botsMove(bot.makeMove(board));
+            if(bot != null){
+                botsMove(bot.makeMove(board));
+            }
         }
 
         private void botsMove(Bot.Move move){
             board.makeMove(move);
             UI.this.grid[move.getY()][move.getX()].setSign(bot.getPlayer());
+            if(board.getGameStatus() != Board.GameStatus.GAME_CONTINUES){
+                displayResult();
+            }
         }
 
         private void setSign(Board.Player player){
@@ -164,6 +200,9 @@ public class UI extends Application {
     }
 
     private void highlight(Board.ComboWrapper squares){
+        if(squares == null){
+            return;
+        }
         for(int i = 0; i < squares.getCoords().length; i += 2){
             grid[squares.getCoords()[i + 1]][squares.getCoords()[i]].setStyle("-fx-background-color: red;");
         }
@@ -181,7 +220,7 @@ public class UI extends Application {
         if(board.getGameStatus() == Board.GameStatus.NOUGHT_WON){
             result.setText("NOUGHT WON!");
         }
-        if(board.getGameStatus() == Board.GameStatus.NOUGHT_WON){
+        if(board.getGameStatus() == Board.GameStatus.DRAW){
             result.setText("DRAW!");
         }
         result.setTextAlignment(TextAlignment.JUSTIFY);
@@ -191,6 +230,4 @@ public class UI extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
-
 }

@@ -1,6 +1,6 @@
 package ru.spbau202.lupuleac.TicTacToe.Bot;
 
-import ru.spbau202.lupuleac.TicTacToe.Board;
+import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 
 import java.util.ArrayList;
 

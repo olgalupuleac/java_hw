@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
 import ru.spbau202.lupuleac.TicTacToe.Bot.MiniMaxBot;
 import ru.spbau202.lupuleac.TicTacToe.Bot.RandomBot;
+import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 
 public class Settings {
     public enum PlayMode {

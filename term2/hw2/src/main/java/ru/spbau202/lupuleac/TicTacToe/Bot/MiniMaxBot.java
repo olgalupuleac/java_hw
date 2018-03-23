@@ -1,106 +1,96 @@
 package ru.spbau202.lupuleac.TicTacToe.Bot;
 
 
-import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.TicTacToe.Board;
-
-import java.util.Random;
-
-
+import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 
 
 /**
- * Bot which implements the MiniMax algorithm.
+ * An implementation of MiniMax algorithm.
  */
 public class MiniMaxBot extends Bot {
-    public MiniMaxBot(Board.Player player){
+    private Move bestMove;
+
+    public MiniMaxBot(Board.Player player) {
         super(player);
     }
+
     @Override
     public Move makeMove(Board board) {
-        MoveWithScore res = miniMax(board, 0, null);
-        System.err.printf("res = %d\n", res.score);
-        return res.move;
+        miniMax(board, 0);
+        return bestMove;
     }
 
     /**
      * The body of the algorithm.
      *
+     * @param board        the Tic Tac Toe board to play on
      * @param currentDepth the current depth
      * @return the score of the board
      */
-    private MoveWithScore miniMax(Board givenBoard, int currentDepth, Move turn) {
+    private int miniMax(Board board, int currentDepth) {
         int maxDepth = 9;
-        if (currentDepth++ == maxDepth || givenBoard.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
-            givenBoard.printBoard();
-            System.err.printf("score = %d\n", score(givenBoard));
-            return new MoveWithScore(turn, score(givenBoard), currentDepth - 1);
+        if (currentDepth++ == maxDepth || board.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
+            return score(board);
         }
-        if (givenBoard.getCurrentPlayer() == player) {
-            return getMax(givenBoard, currentDepth);
+        if (board.getCurrentPlayer() == player) {
+            return getMax(board, currentDepth);
         } else {
-            return getMin(givenBoard, currentDepth);
+            return getMin(board, currentDepth);
         }
     }
 
     /**
      * Play the move with the highest score.
      *
+     * @param board        the Tic Tac Toe board to play on
      * @param currentDepth the current depth
      * @return the score of the board
      */
-    private MoveWithScore getMax(Board givenBoard, int currentDepth) {
-        MoveWithScore best = null;
-        for (Move move : getPossibleMoves(givenBoard)) {
-            givenBoard.makeMove(move);
-            MoveWithScore moveWithScore = miniMax(givenBoard, currentDepth, move);
-            if(best == null || best.compareTo(moveWithScore) < 0){
-                best = moveWithScore;
+    private int getMax(Board board, int currentDepth) {
+        int bestScore = Integer.MIN_VALUE;
+        Move bestMove = null;
+        for (Move theMove : getPossibleMoves(board)) {
+            Board modifiedBoard = board.deepCopy();
+            modifiedBoard.makeMove(theMove);
+            int score = miniMax(modifiedBoard, currentDepth);
+            if (score >= bestScore) {
+                bestScore = score;
+                bestMove = theMove;
             }
-            if(best.compareTo(moveWithScore) == 0){
-                Random rand = new Random(System.currentTimeMillis());
-                if(rand.nextInt(2) == 0){
-                    best = moveWithScore;
-                }
-            }
-            givenBoard.discardChanges(move);
+
         }
-        return best;
+        this.bestMove = bestMove;
+        return bestScore;
     }
 
     /**
-     * Play the move with the highest score.
+     * Play the move with the lowest score.
      *
+     * @param board        the Tic Tac Toe board to play on
      * @param currentDepth the current depth
      * @return the score of the board
      */
-    private MoveWithScore getMin(Board givenBoard, int currentDepth) {
-        MoveWithScore best = null;
-        for (Move move : getPossibleMoves(givenBoard)) {
-            givenBoard.makeMove(move);
-            MoveWithScore moveWithScore = miniMax(givenBoard, currentDepth, move);
-            if(best == null || best.compareTo(moveWithScore) > 0){
-                best = moveWithScore;
+    private int getMin(Board board, int currentDepth) {
+        int bestScore = Integer.MAX_VALUE;
+        for (Move theMove : getPossibleMoves(board)) {
+            Board modifiedBoard = board.deepCopy();
+            modifiedBoard.makeMove(theMove);
+            int score = miniMax(modifiedBoard, currentDepth);
+            if (score <= bestScore) {
+                bestScore = score;
             }
-            if(best.compareTo(moveWithScore) == 0){
-                Random rand = new Random(System.currentTimeMillis());
-                if(rand.nextInt(2) == 0){
-                    best = moveWithScore;
-                }
-            }
-            givenBoard.discardChanges(move);
         }
-        return best;
+        return bestScore;
     }
-
-
 
     /**
      * Get the score of the board.
      *
+     * @param board the Tic Tac Toe board to play on
      * @return the score of the board
      */
     private int score(Board board) {
+
         if (board.getGameStatus() == player.toGameStatus()) {
             return 10;
         }
@@ -109,39 +99,6 @@ public class MiniMaxBot extends Bot {
         }
         return 0;
     }
-
-    /**
-     * Class which represents a move, a score relevant to this move and number of turns
-     * before the game is over (or max recursion depth if the end of game wasn't reached).
-     */
-    static class MoveWithScore implements Comparable {
-        private Move move;
-        private int score;
-        private int depth;
-
-        MoveWithScore(Move move, int score, int depth) {
-            this.move = move;
-            this.score = score;
-            this.depth = depth;
-        }
-
-       /**
-         * @param o the object to be compared.
-         * @return a negative integer, zero, or a positive integer as this object
-         * is less than, equal to, or greater than the specified object.
-         * @throws NullPointerException if the specified object is null
-         * @throws ClassCastException   if the specified object's type prevents it
-         *                              from being compared to this object.
-         */
-        @Override
-        public int compareTo(@NotNull Object o) {
-            if(score != ((MoveWithScore)o).score){
-                return score - ((MoveWithScore)o).score;
-            }
-            return (((MoveWithScore)o).depth - depth) * score;
-        }
-    }
-
 
 
 }

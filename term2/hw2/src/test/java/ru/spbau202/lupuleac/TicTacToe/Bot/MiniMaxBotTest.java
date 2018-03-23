@@ -1,9 +1,8 @@
 package ru.spbau202.lupuleac.TicTacToe.Bot;
 
 import org.junit.Test;
-import ru.spbau202.lupuleac.TicTacToe.Board;
+import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
