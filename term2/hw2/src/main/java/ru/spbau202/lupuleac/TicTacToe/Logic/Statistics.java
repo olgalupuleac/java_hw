@@ -41,4 +41,16 @@ public class Statistics {
                 "\nDraws: " +
                 draws;
     }
+
+    public int getCrossWins() {
+        return crossWins;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public int getNoughtWins() {
+        return noughtWins;
+    }
 }
