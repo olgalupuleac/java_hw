@@ -129,6 +129,7 @@ public class UI extends Application {
     }
 
     private void restart() {
+        bot = null;
         statistics.increment(board.getGameStatus());
         board.clear();
         window.setScene(choosePlayMode());

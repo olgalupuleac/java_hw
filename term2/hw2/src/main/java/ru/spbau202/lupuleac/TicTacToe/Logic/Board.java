@@ -23,6 +23,16 @@ public class Board {
         }
     }
 
+    //package private access for tests
+    int getNumberOfBusySquares(){
+        return numberOfBusySquares;
+    }
+
+    @NotNull
+    public SquareState getSquare(int x, int y){
+        return board[x][y];
+    }
+
     private Board(@NotNull Board other) {
         this.numberOfBusySquares = other.numberOfBusySquares;
         this.currentPlayer = other.currentPlayer;
@@ -54,9 +64,12 @@ public class Board {
      *
      * @param x is x coordinate of a square where a move is to be made
      * @param y is y coordinate of a square where a move is to be made
+     * @throws InvalidMoveException when the specified move cannot be made
      */
     public void makeMove(int x, int y) {
-        assert verify(x, y);
+        if(!verify(x, y)){
+            throw new InvalidMoveException();
+        }
         numberOfBusySquares++;
         board[x][y] = currentPlayer.toSquareState();
         if (checkForWin()) {
@@ -215,6 +228,15 @@ public class Board {
 
         public int[] getCoords() {
             return coords;
+        }
+    }
+
+    /**
+     * Exception thrown when the move is invalid.
+     */
+    public class InvalidMoveException extends RuntimeException {
+        public InvalidMoveException(){
+            super();
         }
     }
 }
