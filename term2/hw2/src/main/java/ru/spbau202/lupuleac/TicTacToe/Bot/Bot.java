@@ -20,8 +20,8 @@ public abstract class Bot {
      * Class which represents a move on board.
      * Keeps the coordinates of the move.
      */
-    public class Move {
-        Move(int x, int y) {
+    public static class Move {
+        public Move(int x, int y) {
             this.x = x;
             this.y = y;
         }
@@ -35,6 +35,11 @@ public abstract class Bot {
 
         public int getY() {
             return y;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Move && ((Move) o).y == y && ((Move) o).x == x;
         }
     }
 
@@ -53,7 +58,7 @@ public abstract class Bot {
      * @return a List of possible moves
      */
     @NotNull
-    List<Move> getPossibleMoves(@NotNull Board board) {
+    public static List<Move> getPossibleMoves(@NotNull Board board) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
