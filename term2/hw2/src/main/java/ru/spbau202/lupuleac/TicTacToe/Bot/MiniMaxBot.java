@@ -51,13 +51,13 @@ public class MiniMaxBot extends Bot {
     private int getMax(Board board, int currentDepth) {
         int bestScore = Integer.MIN_VALUE;
         Move bestMove = null;
-        for (Move theMove : getPossibleMoves(board)) {
+        for (Move move : getPossibleMoves(board)) {
             Board modifiedBoard = board.deepCopy();
-            modifiedBoard.makeMove(theMove);
+            modifiedBoard.makeMove(move);
             int score = miniMax(modifiedBoard, currentDepth);
             if (score >= bestScore) {
                 bestScore = score;
-                bestMove = theMove;
+                bestMove = move;
             }
 
         }
