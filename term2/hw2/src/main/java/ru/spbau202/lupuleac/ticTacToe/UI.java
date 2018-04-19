@@ -123,11 +123,11 @@ public class UI extends Application {
         root.setPrefSize(600, 600);
         root.setStyle("-fx-background-color: #0000ff");
         Button bot1 = new Button("Easy");
-        bot1.setLayoutX(40);
-        bot1.setLayoutY(70);
+        bot1.setLayoutX(290);
+        bot1.setLayoutY(170);
         Button bot2 = new Button("Hard");
-        bot2.setLayoutX(40);
-        bot2.setLayoutY(30);
+        bot2.setLayoutX(290);
+        bot2.setLayoutY(130);
         bot2.setOnAction(e -> {
             settings.setBotLevel(2);
             window.setScene(mainScene());
