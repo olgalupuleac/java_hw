@@ -1,12 +1,12 @@
-package ru.spbau202.lupuleac.TicTacToe.Bot;
+package ru.spbau202.lupuleac.ticTacToe.bot;
 
-import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
+import ru.spbau202.lupuleac.ticTacToe.logic.Board;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * Bot which makes random moves on board.
+ * bot which makes random moves on board.
  */
 public class RandomBot extends Bot{
 

@@ -1,9 +1,9 @@
-package ru.spbau202.lupuleac.TicTacToe.Logic;
+package ru.spbau202.lupuleac.ticTacToe.logic;
 
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
+import ru.spbau202.lupuleac.ticTacToe.bot.Bot;
 
 /**
  * Class which represents Tic Tac Toe board.

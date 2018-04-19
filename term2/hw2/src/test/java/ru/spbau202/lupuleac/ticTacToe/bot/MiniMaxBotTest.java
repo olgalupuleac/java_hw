@@ -1,8 +1,8 @@
-package ru.spbau202.lupuleac.TicTacToe.Bot;
+package ru.spbau202.lupuleac.ticTacToe.bot;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
+import ru.spbau202.lupuleac.ticTacToe.logic.Board;
 
 import static org.junit.Assert.*;
 

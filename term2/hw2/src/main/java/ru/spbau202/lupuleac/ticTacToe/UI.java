@@ -1,4 +1,4 @@
-package ru.spbau202.lupuleac.TicTacToe;
+package ru.spbau202.lupuleac.ticTacToe;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -14,9 +14,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
-import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
-import ru.spbau202.lupuleac.TicTacToe.Logic.Statistics;
+import ru.spbau202.lupuleac.ticTacToe.bot.Bot;
+import ru.spbau202.lupuleac.ticTacToe.logic.Board;
+import ru.spbau202.lupuleac.ticTacToe.logic.Statistics;
 
 /**
  * Class which launches the application and represents the user interface.
@@ -29,6 +29,10 @@ public class UI extends Application {
     private Box[][] grid;
     private Settings settings = new Settings();
     private Statistics statistics = new Statistics();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     /**
      * The main entry point for all JavaFX applications.
@@ -48,6 +52,8 @@ public class UI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
+        window.setMinHeight(600);
+        window.setMinWidth(600);
         primaryStage.setScene(choosePlayMode());
         primaryStage.show();
     }
@@ -61,12 +67,13 @@ public class UI extends Application {
     private Scene choosePlayMode() {
         window.setTitle("Choose play mode");
         Pane pane = new Pane();
-        pane.setPrefSize(300, 300);
-        Button hotSeat = new Button("Play with friend");
-        hotSeat.setLayoutX(140);
+        pane.setPrefSize(600, 600);
+        pane.setStyle("-fx-background-color: #0000ff");
+        Button hotSeat = new Button("    Play with friend    ");
+        hotSeat.setLayoutX(250);
         hotSeat.setLayoutY(130);
-        Button gameWithBot = new Button("Play with bot");
-        gameWithBot.setLayoutX(140);
+        Button gameWithBot = new Button("      Play with bot     ");
+        gameWithBot.setLayoutX(250);
         gameWithBot.setLayoutY(90);
         gameWithBot.setOnAction(e -> {
             settings.setPlayMode(Settings.PlayMode.BOT);
@@ -78,7 +85,7 @@ public class UI extends Application {
             window.setScene(mainScene());
         });
         Button showGameStatistics = new Button("Show game statistics");
-        showGameStatistics.setLayoutX(140);
+        showGameStatistics.setLayoutX(250);
         showGameStatistics.setLayoutY(170);
         showGameStatistics.setOnAction(e -> window.setScene(showStatistics()));
         pane.getChildren().addAll(gameWithBot, hotSeat, showGameStatistics);
@@ -96,12 +103,12 @@ public class UI extends Application {
         Pane root = new Pane();
         root.setPrefSize(600, 600);
         Label label = new Label(statistics.showStatistics());
-        Button restartButton = new Button("Restart");
-        restartButton.setAlignment(Pos.BOTTOM_CENTER);
-        restartButton.setLayoutX(270);
-        restartButton.setLayoutY(30);
-        restartButton.setOnAction(e -> restart());
-        root.getChildren().addAll(label, restartButton);
+        Button newGame = new Button("New Game");
+        newGame.setAlignment(Pos.BOTTOM_CENTER);
+        newGame.setLayoutX(270);
+        newGame.setLayoutY(30);
+        newGame.setOnAction(e -> restart());
+        root.getChildren().addAll(label, newGame);
         return new Scene(root);
     }
 
@@ -113,7 +120,8 @@ public class UI extends Application {
     @NotNull
     private Scene chooseBotLevel() {
         Pane root = new Pane();
-        root.setPrefSize(200, 200);
+        root.setPrefSize(600, 600);
+        root.setStyle("-fx-background-color: #0000ff");
         Button bot1 = new Button("Easy");
         bot1.setLayoutX(40);
         bot1.setLayoutY(70);
@@ -155,13 +163,9 @@ public class UI extends Application {
      */
     private void restart() {
         bot = null;
-        statistics.increment(board.getGameStatus());
+        statistics.increment(board.getGameStatus(), settings.getPlayMode());
         board.clear();
         window.setScene(choosePlayMode());
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     /**
@@ -173,68 +177,6 @@ public class UI extends Application {
             for (int j = 0; j < 3; j++) {
                 grid[i][j] = new Box(j, i);
                 root.getChildren().addAll(grid[i][j]);
-            }
-        }
-    }
-
-    /**
-     * Class which represents a square of the game board.
-     */
-    private class Box extends StackPane {
-        private int x;
-        private int y;
-        private Text sign = new Text();
-
-        private Box(int x, int y) {
-            this.x = x;
-            this.y = y;
-            Rectangle border = new Rectangle(200, 200);
-            border.setFill(null);
-            border.setStroke(Color.BLACK);
-            sign.setFont(Font.font(80));
-            setAlignment(Pos.CENTER);
-            getChildren().addAll(border, sign);
-            setTranslateX(x * 200);
-            setTranslateY(y * 200);
-            setOnMouseClicked(event -> move());
-        }
-
-        /**
-         * Handles the player's move.
-         */
-        private void move() {
-            if (bot != null && bot.getPlayer() == board.getCurrentPlayer()
-                    || !board.verify(x, y)) {
-                return;
-            }
-            setSign(board.getCurrentPlayer());
-            board.makeMove(x, y);
-            if (board.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
-                UI.this.displayResult();
-            }
-            if (bot != null) {
-                botsMove(bot.makeMove(board));
-            }
-        }
-
-        private void botsMove(Bot.Move move) {
-            board.makeMove(move);
-            UI.this.grid[move.getY()][move.getX()].setSign(bot.getPlayer());
-            if (board.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
-                displayResult();
-            }
-        }
-
-        /**
-         * Draws the sign on square
-         *
-         * @param player is a player which sign is to be set
-         */
-        private void setSign(Board.Player player) {
-            if (player == Board.Player.CROSS) {
-                sign.setText("X");
-            } else {
-                sign.setText("O");
             }
         }
     }
@@ -277,5 +219,68 @@ public class UI extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Class which represents a square of the game board.
+     */
+    private class Box extends StackPane {
+        private int x;
+        private int y;
+        private Text sign = new Text();
+
+        private Box(int x, int y) {
+            this.x = x;
+            this.y = y;
+            Rectangle border = new Rectangle(200, 200);
+            border.setFill(null);
+            border.setStroke(Color.BLACK);
+            sign.setFont(Font.font(80));
+            setAlignment(Pos.CENTER);
+            getChildren().addAll(border, sign);
+            setTranslateX(x * 200);
+            setTranslateY(y * 200);
+            setOnMouseClicked(event -> move());
+        }
+
+        /**
+         * Handles the player's move.
+         */
+        private void move() {
+            if (bot != null && bot.getPlayer() == board.getCurrentPlayer()
+                    || !board.verify(x, y)) {
+                return;
+            }
+            setSign(board.getCurrentPlayer());
+            board.makeMove(x, y);
+            if (board.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
+                UI.this.displayResult();
+                return;
+            }
+            if (bot != null) {
+                botsMove(bot.makeMove(board));
+            }
+        }
+
+        private void botsMove(Bot.Move move) {
+            board.makeMove(move);
+            UI.this.grid[move.getY()][move.getX()].setSign(bot.getPlayer());
+            if (board.getGameStatus() != Board.GameStatus.GAME_CONTINUES) {
+                displayResult();
+            }
+        }
+
+        /**
+         * Draws the sign on square
+         *
+         * @param player is a player which sign is to be set
+         */
+        private void setSign(Board.Player player) {
+            if (player == Board.Player.CROSS) {
+                sign.setText("X");
+            } else {
+                sign.setText("O");
+            }
+        }
     }
 }

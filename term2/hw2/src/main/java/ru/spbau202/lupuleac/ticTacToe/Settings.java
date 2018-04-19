@@ -1,21 +1,25 @@
-package ru.spbau202.lupuleac.TicTacToe;
+package ru.spbau202.lupuleac.ticTacToe;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.TicTacToe.Bot.Bot;
-import ru.spbau202.lupuleac.TicTacToe.Bot.MiniMaxBot;
-import ru.spbau202.lupuleac.TicTacToe.Bot.RandomBot;
-import ru.spbau202.lupuleac.TicTacToe.Logic.Board;
+import ru.spbau202.lupuleac.ticTacToe.bot.Bot;
+import ru.spbau202.lupuleac.ticTacToe.bot.MiniMaxBot;
+import ru.spbau202.lupuleac.ticTacToe.bot.RandomBot;
+import ru.spbau202.lupuleac.ticTacToe.logic.Board;
 
 /**
  * Class which keeps the settings of the game.
  * Access is package private because the class is used only inside the package.
  */
-class Settings {
+public class Settings {
 
     private PlayMode playMode;
 
     public void setPlayMode(PlayMode playMode) {
         this.playMode = playMode;
+    }
+
+    public PlayMode getPlayMode() {
+        return playMode;
     }
 
     public enum PlayMode {
