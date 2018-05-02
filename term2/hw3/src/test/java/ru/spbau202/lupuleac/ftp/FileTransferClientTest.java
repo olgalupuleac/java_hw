@@ -20,7 +20,7 @@ public class FileTransferClientTest {
     @Test
     public void get() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
-            byte[] fileContent = client.get("src/dir/file.txt");
+            byte[] fileContent = client.get("src/test/resources/dir/file.txt");
             byte[] expected = "aaaa".getBytes();
             assertArrayEquals(expected, fileContent);
             client.exit();
@@ -30,7 +30,7 @@ public class FileTransferClientTest {
     @Test
     public void list() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
-            List<FileTransferClient.FileInfo> files = client.list("src/dir");
+            List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
             assertTrue(files.contains(new FileTransferClient.FileInfo("sub_dir", true)));
@@ -41,11 +41,11 @@ public class FileTransferClientTest {
     @Test
     public void severalQueries() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
-            List<FileTransferClient.FileInfo> files = client.list("src/dir");
+            List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
             assertTrue(files.contains(new FileTransferClient.FileInfo("sub_dir", true)));
-            byte[] fileContent = client.get("src/dir/file.txt");
+            byte[] fileContent = client.get("src/test/resources/dir/file.txt");
             byte[] expected = "aaaa".getBytes();
             assertArrayEquals(expected, fileContent);
             client.exit();
