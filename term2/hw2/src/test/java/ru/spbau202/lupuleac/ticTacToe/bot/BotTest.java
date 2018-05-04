@@ -1,7 +1,7 @@
-package ru.spbau202.lupuleac.ticTacToe.bot;
+package ru.spbau202.lupuleac.tictactoe.bot;
 
 import org.junit.Test;
-import ru.spbau202.lupuleac.ticTacToe.logic.Board;
+import ru.spbau202.lupuleac.tictactoe.logic.Board;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,7 +1,7 @@
-package ru.spbau202.lupuleac.ticTacToe.logic;
+package ru.spbau202.lupuleac.tictactoe.logic;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.ticTacToe.Settings;
+import ru.spbau202.lupuleac.tictactoe.Settings;
 
 /**
  * Class which represents game statistics.

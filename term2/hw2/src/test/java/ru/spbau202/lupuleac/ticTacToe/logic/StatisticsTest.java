@@ -1,7 +1,7 @@
-package ru.spbau202.lupuleac.ticTacToe.logic;
+package ru.spbau202.lupuleac.tictactoe.logic;
 
 import org.junit.Test;
-import ru.spbau202.lupuleac.ticTacToe.Settings;
+import ru.spbau202.lupuleac.tictactoe.Settings;
 
 import static org.junit.Assert.*;
 

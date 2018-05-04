@@ -1,10 +1,10 @@
-package ru.spbau202.lupuleac.ticTacToe;
+package ru.spbau202.lupuleac.tictactoe;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.ticTacToe.bot.Bot;
-import ru.spbau202.lupuleac.ticTacToe.bot.MiniMaxBot;
-import ru.spbau202.lupuleac.ticTacToe.bot.RandomBot;
-import ru.spbau202.lupuleac.ticTacToe.logic.Board;
+import ru.spbau202.lupuleac.tictactoe.bot.Bot;
+import ru.spbau202.lupuleac.tictactoe.bot.MiniMaxBot;
+import ru.spbau202.lupuleac.tictactoe.bot.RandomBot;
+import ru.spbau202.lupuleac.tictactoe.logic.Board;
 
 /**
  * Class which keeps the settings of the game.

@@ -1,15 +1,15 @@
-package ru.spbau202.lupuleac.ticTacToe.logic;
+package ru.spbau202.lupuleac.tictactoe.logic;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.GameStatus.CROSS_WON;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.GameStatus.DRAW;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.GameStatus.NOUGHT_WON;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.SquareState.CROSS;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.SquareState.EMPTY;
-import static ru.spbau202.lupuleac.ticTacToe.logic.Board.SquareState.NOUGHT;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.GameStatus.CROSS_WON;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.GameStatus.DRAW;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.GameStatus.NOUGHT_WON;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.SquareState.CROSS;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.SquareState.EMPTY;
+import static ru.spbau202.lupuleac.tictactoe.logic.Board.SquareState.NOUGHT;
 
 public class BoardTest {
     private Board board;

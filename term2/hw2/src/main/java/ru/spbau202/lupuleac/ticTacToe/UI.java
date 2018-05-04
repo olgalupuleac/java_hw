@@ -1,4 +1,4 @@
-package ru.spbau202.lupuleac.ticTacToe;
+package ru.spbau202.lupuleac.tictactoe;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -14,9 +14,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.ticTacToe.bot.Bot;
-import ru.spbau202.lupuleac.ticTacToe.logic.Board;
-import ru.spbau202.lupuleac.ticTacToe.logic.Statistics;
+import ru.spbau202.lupuleac.tictactoe.bot.Bot;
+import ru.spbau202.lupuleac.tictactoe.logic.Board;
+import ru.spbau202.lupuleac.tictactoe.logic.Statistics;
 
 /**
  * Class which launches the application and represents the user interface.
@@ -52,8 +52,8 @@ public class UI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        window.setMinHeight(600);
-        window.setMinWidth(600);
+        window.setMinHeight(300);
+        window.setMinWidth(300);
         primaryStage.setScene(choosePlayMode());
         primaryStage.show();
     }
@@ -73,6 +73,7 @@ public class UI extends Application {
         hotSeat.setLayoutX(250);
         hotSeat.setLayoutY(130);
         Button gameWithBot = new Button("      Play with bot     ");
+
         gameWithBot.setLayoutX(250);
         gameWithBot.setLayoutY(90);
         gameWithBot.setOnAction(e -> {
@@ -149,6 +150,8 @@ public class UI extends Application {
     @NotNull
     private Scene mainScene() {
         window.setTitle("Game");
+        window.setMinHeight(600);
+        window.setMinWidth(600);
         root = new Pane();
         root.setPrefSize(600, 600);
         drawGrid();
@@ -214,7 +217,11 @@ public class UI extends Application {
             result.setText("DRAW!");
         }
         result.setTextAlignment(TextAlignment.JUSTIFY);
-        root.getChildren().add(result);
+        Button ok = new Button("Ok");
+        ok.setLayoutY(100);
+        ok.setLayoutX(100);
+        ok.setOnAction(e -> ((Stage)ok.getScene().getWindow()).close());
+        root.getChildren().addAll(result, ok);
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);

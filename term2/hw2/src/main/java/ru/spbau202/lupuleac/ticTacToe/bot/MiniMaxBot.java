@@ -1,8 +1,8 @@
-package ru.spbau202.lupuleac.ticTacToe.bot;
+package ru.spbau202.lupuleac.tictactoe.bot;
 
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau202.lupuleac.ticTacToe.logic.Board;
+import ru.spbau202.lupuleac.tictactoe.logic.Board;
 
 
 /**
