@@ -43,8 +43,7 @@ public class FileTransferServer {
             int action;
             while (isQuery((action = in.readInt()))) {
                 path = in.readUTF();
-                Object[] logParams = {action, path};
-                LOGGER.log(Level.INFO, "action = %d, path = %s\n", logParams);
+                LOGGER.log(Level.INFO, "action = " + action + ", path = "  + path);
                 if (action == 1) {
                     processList(path, out);
                 }
@@ -97,7 +96,7 @@ public class FileTransferServer {
      * If the directory does not exist writes 0 as a size.
      *
      * @param path is a path to the directory
-     * @param out
+     * @param out is an outputstream where to write
      */
     private static void processList(@NotNull String path, @NotNull DataOutputStream out) {
         File dir = new File(path);

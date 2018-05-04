@@ -39,24 +39,27 @@ public class FileTransferClient implements AutoCloseable {
      * @return an array of bytes with file content
      * @throws IOException if it occurs during the process
      */
-    public byte[] get(@NotNull String path) throws IOException {
+    public void get(@NotNull String path) throws IOException {
         LOGGER.info("Getting file " + path);
         out.writeInt(2);
         out.writeUTF(path);
         long size = in.readLong();
         if (size == 0) {
-            return null;
+            return;
         }
+        File file = new File("downloads" + File.separator + path);
+        file.getParentFile().mkdirs();
+        file.createNewFile();
         long count = 0;
         byte[] data = new byte[16384];
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        while (count < size) {
-            int nRead = in.read(data, 0, data.length);
-            buffer.write(data, 0, nRead);
-            count += nRead;
+        try(FileOutputStream fos = new FileOutputStream(file)){
+            while (count < size) {
+                int nRead = in.read(data, 0, data.length);
+                fos.write(data, 0, nRead);
+                count += nRead;
+            }
+            fos.flush();
         }
-        buffer.flush();
-        return buffer.toByteArray();
     }
 
     /**

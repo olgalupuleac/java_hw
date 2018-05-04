@@ -1,8 +1,10 @@
 package ru.spbau202.lupuleac.ftp;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -20,7 +22,8 @@ public class FileTransferClientTest {
     @Test
     public void get() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
-            byte[] fileContent = client.get("src/test/resources/dir/file.txt");
+            client.get("src/test/resources/dir/file.txt");
+            byte[] fileContent = IOUtils.toByteArray(new FileInputStream("downloads/src/test/resources/dir/file.txt"));
             byte[] expected = "aaaa".getBytes();
             assertArrayEquals(expected, fileContent);
             client.exit();
@@ -45,7 +48,8 @@ public class FileTransferClientTest {
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
             assertTrue(files.contains(new FileTransferClient.FileInfo("sub_dir", true)));
-            byte[] fileContent = client.get("src/test/resources/dir/file.txt");
+            client.get("src/test/resources/dir/file.txt");
+            byte[] fileContent = IOUtils.toByteArray(new FileInputStream("downloads/src/test/resources/dir/file.txt"));
             byte[] expected = "aaaa".getBytes();
             assertArrayEquals(expected, fileContent);
             client.exit();
