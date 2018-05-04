@@ -13,8 +13,8 @@ public class Board {
     private boolean[] opened;
 
     /**
-     * Creates the 
-     * @param n
+     * Creates the board with n * n squares.
+     * @param n is size of every dimension
      */
     public Board(int n){
         this.n = n;
@@ -31,9 +31,15 @@ public class Board {
         }
     }
 
-    public boolean open(int x, int y){
-        if(opened[x] || opened[y]){
-            throw new RuntimeException();
+    /**
+     * Return true if the squares matches.
+     * @param x is a number of the first square
+     * @param y is a number of the second square
+     * @return true if the numbers on squares are equal
+     */
+    public boolean match(int x, int y){
+        if(x == y || opened[x] || opened[y]){
+           return false;
         }
         if(board[x] == board[y]){
             opened[x] = true;

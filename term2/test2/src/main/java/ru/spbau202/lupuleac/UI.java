@@ -169,12 +169,12 @@ public class UI extends Application {
         }
 
         /**
-         * Hides pair to board.
+         * Hides the opened pair.
          */
         private void hidePair(){
             int u = codePair(pairToOpen.get(0).x, pairToOpen.get(0).y);
             int v = codePair(pairToOpen.get(1).x, pairToOpen.get(1).y);
-            if(!board.open(u, v)){
+            if(!board.match(u, v)){
                 System.err.println("set invisible");
                 pairToOpen.get(0).sign.setVisible(false);
                 pairToOpen.get(1).sign.setVisible(false);
