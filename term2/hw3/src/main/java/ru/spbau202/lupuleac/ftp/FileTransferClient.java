@@ -36,7 +36,6 @@ public class FileTransferClient implements AutoCloseable {
      * Loads the file from the server.
      *
      * @param path is a path to a file to be loaded
-     * @return an array of bytes with file content
      * @throws IOException if it occurs during the process
      */
     public void get(@NotNull String path) throws IOException {
