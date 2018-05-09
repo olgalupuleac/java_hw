@@ -85,7 +85,7 @@ public class MiniMaxBot extends Bot {
         return bestScore;
     }
 
-    
+
     /**
      * Get the score of the board.
      *

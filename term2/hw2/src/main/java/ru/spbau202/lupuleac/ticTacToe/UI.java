@@ -1,12 +1,14 @@
 package ru.spbau202.lupuleac.tictactoe;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -65,8 +67,12 @@ public class UI extends Application {
      */
     @NotNull
     private Scene choosePlayMode() {
+        window.setMinHeight(300);
+        window.setMinWidth(300);
         window.setTitle("Choose play mode");
-        Pane pane = new Pane();
+        VBox pane = new VBox();
+        pane.setPadding(new Insets(240));
+        pane.setSpacing(10);
         pane.setPrefSize(600, 600);
         pane.setStyle("-fx-background-color: #0000ff");
         Button hotSeat = new Button("    Play with friend    ");
@@ -102,6 +108,8 @@ public class UI extends Application {
     @NotNull
     private Scene showStatistics() {
         Pane root = new Pane();
+        //root.setPadding(new Insets(240));
+        //root.setSpacing(10);
         root.setPrefSize(600, 600);
         Label label = new Label(statistics.showStatistics());
         Button newGame = new Button("New Game");
@@ -120,7 +128,9 @@ public class UI extends Application {
      */
     @NotNull
     private Scene chooseBotLevel() {
-        Pane root = new Pane();
+        VBox root = new VBox();
+        root.setPadding(new Insets(240));
+        root.setSpacing(10);
         root.setPrefSize(600, 600);
         root.setStyle("-fx-background-color: #0000ff");
         Button bot1 = new Button("Easy");
@@ -220,7 +230,7 @@ public class UI extends Application {
         Button ok = new Button("Ok");
         ok.setLayoutY(100);
         ok.setLayoutX(100);
-        ok.setOnAction(e -> ((Stage)ok.getScene().getWindow()).close());
+        ok.setOnAction(e -> ((Stage) ok.getScene().getWindow()).close());
         root.getChildren().addAll(result, ok);
         Stage stage = new Stage();
         Scene scene = new Scene(root);
