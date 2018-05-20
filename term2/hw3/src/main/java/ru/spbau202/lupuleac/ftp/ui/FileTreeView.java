@@ -25,8 +25,16 @@ import java.util.ArrayList;
 public class FileTreeView extends Application {
     private FileTransferClient client;
     private Stage primaryStage;
+    private static int portNumber;
+    private static String host;
 
     public static void main(String[] args) {
+        if (args.length != 2) {
+            throw new RuntimeException("Incorrect usage of FileTransferServer.main():," +
+                    " the arguments should contain only port number.");
+        }
+        portNumber = Integer.parseInt(args[0]);
+        host = args[1];
         launch(args);
     }
 
@@ -43,7 +51,7 @@ public class FileTreeView extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         try {
-            client = new FileTransferClient("localhost", 81);
+            client = new FileTransferClient(host, portNumber);
         } catch (IOException e) {
             e.printStackTrace();
         }
