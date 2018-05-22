@@ -6,7 +6,11 @@ import ru.spbau202.lupuleac.annotations.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 
+/**
+ * Class which runs all tests in the given class.
+ */
 public class XUnit {
     private ArrayList<Method> beforeTestMethods = new ArrayList<>();
     private ArrayList<Method> afterTestMethods = new ArrayList<>();
@@ -17,10 +21,17 @@ public class XUnit {
     private int failed;
     private int passed;
 
-    public XUnit(Class<?> testClass){
-        this.testClass = testClass;
+    public XUnit(String name) throws ClassNotFoundException {
+        this.testClass = Class.forName(name);
     }
 
+    /**
+     * Runs all tests in class.
+     *
+     * @throws IllegalAccessException    if it occurs during method invocation
+     * @throws InvocationTargetException if method which should be invoked before or after test fails.
+     * @throws InstantiationException    if it occurs during method invocation
+     */
     public void runTests() throws IllegalAccessException, InvocationTargetException,
             InstantiationException {
         clear();
@@ -47,6 +58,7 @@ public class XUnit {
                 tests.add(method);
             }
         }
+        tests.sort(Comparator.comparing(Method::getName));
     }
 
     private void clear() {
@@ -72,7 +84,7 @@ public class XUnit {
             Test annotation = method.getAnnotation(Test.class);
             long start = System.currentTimeMillis();
             if (!annotation.ignore().equals("")) {
-                System.err.println("Method " + method.getName() + " is ignored.\n" + annotation.ignore());
+                System.out.println("Method " + method.getName() + " is ignored.\nReason: " + annotation.ignore());
                 continue;
             }
             Exception exception = null;
@@ -80,10 +92,6 @@ public class XUnit {
             boolean testResult = true;
             try {
                 method.invoke(instance);
-            } catch (InvocationTargetException e) {
-                System.err.println("Invocation of test " + method.getName()
-                        + "finished with error\n" + e.getMessage());
-                continue;
             } catch (Exception e) {
                 exception = e;
                 if (!e.getCause().getClass().equals(annotation.expected())) {
@@ -99,18 +107,18 @@ public class XUnit {
             }
             if (testResult) {
                 passed++;
-                System.out.printf("Test %s passed in %s\n", method.getName(),
+                System.out.printf("Test %s passed in %s.\n", method.getName(),
                         DurationFormatUtils.formatDurationWords(end - start,
                                 true, true));
             } else {
                 failed++;
-                System.out.printf("Test %s failed in %s\n", method.getName(),
+                System.out.printf("Test %s failed in %s.\n", method.getName(),
                         DurationFormatUtils.formatDurationWords(end - start,
                                 true, true));
                 if (exceptionExpected && exception == null) {
-                    System.out.printf(annotation.expected().getName() + " was expected\n");
+                    System.out.printf(annotation.expected().getName() + " was expected.\n");
                 } else {
-                    exception.printStackTrace();
+                    System.out.println("Reason: " + exception.getCause().getMessage());
                 }
             }
         }
@@ -119,7 +127,7 @@ public class XUnit {
         }
     }
 
-    private void printStatistics(){
+    private void printStatistics() {
         System.out.printf("Total number of tests: %d\nPassed: %d\nFailed: %d\n", tests.size(),
                 passed, failed);
     }
