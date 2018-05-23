@@ -43,6 +43,11 @@ public class XUnit {
         printStatistics();
     }
 
+    /**
+     * Separates methods according to their annotations (when the methods should be invoked).
+     *
+     * @param methods are methods to be separated
+     */
     private void separateMethods(Method[] methods) {
         for (Method method : methods) {
             if (method.isAnnotationPresent(Before.class)) {
@@ -63,6 +68,9 @@ public class XUnit {
         }
     }
 
+    /**
+     * Clears resources.
+     */
     private void clear() {
         beforeClassTestMethods.clear();
         afterClassTestMethods.clear();
@@ -73,6 +81,13 @@ public class XUnit {
         failed = 0;
     }
 
+    /**
+     * Invokes all tests and methods which should be invoked before/after.
+     *
+     * @throws IllegalAccessException    if it occurs during method (not test) invocation
+     * @throws InstantiationException    if it occurs during method (not test) invocation
+     * @throws InvocationTargetException if it occurs during method (not test) invocation
+     */
     private void launch() throws IllegalAccessException,
             InstantiationException, InvocationTargetException {
         Object instance = testClass.newInstance();
@@ -129,11 +144,17 @@ public class XUnit {
         }
     }
 
+    /**
+     * Prints final statistic of test invocation.
+     */
     private void printStatistics() {
         System.out.printf("Total number of tests: %d\nPassed: %d\nFailed: %d\nIgnored: %d\n", tests.size(),
                 passed, failed, ignored);
     }
 
+    /**
+     * Class which represents results of test invocation.
+     */
     static class TestResult {
         private TestStatus result;
         private String methodName;
@@ -148,19 +169,20 @@ public class XUnit {
             this.reason = reason;
         }
 
-        public long getTime() {
+        long getTime() {
             return time;
         }
 
-        public String getMethodName() {
+        String getMethodName() {
             return methodName;
         }
 
-        public TestStatus getResult() {
+        TestStatus getResult() {
             return result;
         }
 
-        public String getReason() {
+
+        String getReason() {
             return reason;
         }
 
