@@ -1,18 +1,22 @@
 #!/bin/bash
 
 cd term2
-ls -l
+ls
 echo "end of list"
-for FILE in `ls -l`
+for FILE in `ls`
 do 
     echo "$FILE"
-    if test -d $FILE
-    then
+    if  [ -d "${FILE}" ] ; then
+	  echo "again"
+	  echo "$FILE"
       cd "$FILE"
       chmod +x gradlew
       ./gradlew build
       if [ $? -ne 0 ]; then
         exit 1
       fi
-   fi
+	  cd ..
+    else 
+	   echo "fail"
+	fi
 done
