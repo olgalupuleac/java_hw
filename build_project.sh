@@ -5,10 +5,10 @@ ls -l
 echo "end of list"
 for FILE in `ls -l`
 do 
+    echo "$FILE"
     if test -d $FILE
     then
       cd "$FILE"
-      echo "$FILE"
       chmod +x gradlew
       ./gradlew build
       if [ $? -ne 0 ]; then
