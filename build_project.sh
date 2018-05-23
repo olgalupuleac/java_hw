@@ -9,5 +9,8 @@ do
       echo "$FILE"
       chmod +x gradlew
       ./gradlew build
+      if [ $? -ne 0 ]; then
+        exit 1
+      fi
    fi
 done
