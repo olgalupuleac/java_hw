@@ -95,15 +95,15 @@ public class XUnit {
             method.invoke(instance);
         }
         for (Method method : tests) {
-            for (Method beforeMethod : beforeTestMethods) {
-                beforeMethod.invoke(instance);
-            }
             Test annotation = method.getAnnotation(Test.class);
             long start = System.currentTimeMillis();
             if (!annotation.ignore().equals("")) {
                 testResults.put(method.getName(), new TestResult(TestStatus.IGNORED, method.getName(), 0, annotation.ignore()));
                 ignored++;
                 continue;
+            }
+            for (Method beforeMethod : beforeTestMethods) {
+                beforeMethod.invoke(instance);
             }
             Exception exception = null;
             boolean exceptionExpected = !annotation.expected().equals(Object.class);

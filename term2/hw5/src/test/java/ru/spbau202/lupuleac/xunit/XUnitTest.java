@@ -8,6 +8,10 @@ import static org.junit.Assert.assertEquals;
 
 public class XUnitTest {
     private XUnit xUnit;
+    static int beforeClass;
+    static int afterClass;
+    static int after;
+    static int before;
 
     @Test
     public void runTests() throws Exception {
@@ -25,6 +29,10 @@ public class XUnitTest {
         assertEquals(XUnit.TestStatus.FAILED, results.get("failingTest").getResult());
         assertEquals("this test should fail", results.get("failingTest").getReason());
         assertEquals(XUnit.TestStatus.PASSED, results.get("testWithExpectedException").getResult());
-    }
 
+        assertEquals(1, afterClass);
+        assertEquals(1, beforeClass);
+        assertEquals(3, before);
+        assertEquals(3, after);
+    }
 }
