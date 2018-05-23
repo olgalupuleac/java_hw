@@ -12,12 +12,13 @@ import static org.junit.Assert.*;
 public class FileTransferClientTest {
     private int port = 15000;
     @Before
-    public void init() {
+    public void init() throws InterruptedException {
         Thread thread = new Thread(() -> {
             String[] args = {Integer.toString(port)};
             FileTransferServer.main(args);
         });
         thread.start();
+        Thread.sleep(1000);
     }
 
     @Test
