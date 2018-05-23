@@ -2,7 +2,8 @@
 
 cd term2
 for FILE in `ls -l`
-do
+do 
+    echo "$FILE"
     if test -d $FILE
     then
       cd "$FILE"
