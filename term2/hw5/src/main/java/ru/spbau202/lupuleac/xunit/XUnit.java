@@ -6,7 +6,7 @@ import ru.spbau202.lupuleac.annotations.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Class which runs all tests in the given class.
@@ -17,9 +17,11 @@ public class XUnit {
     private ArrayList<Method> beforeClassTestMethods = new ArrayList<>();
     private ArrayList<Method> afterClassTestMethods = new ArrayList<>();
     private ArrayList<Method> tests = new ArrayList<>();
+    private HashMap<String, TestResult> testResults = new HashMap<>();
     private Class<?> testClass;
     private int failed;
     private int passed;
+    private int ignored;
 
     public XUnit(String name) throws ClassNotFoundException {
         this.testClass = Class.forName(name);
@@ -37,6 +39,7 @@ public class XUnit {
         clear();
         separateMethods(testClass.getMethods());
         launch();
+        testResults.forEach((key, value) -> value.print());
         printStatistics();
     }
 
@@ -58,7 +61,6 @@ public class XUnit {
                 tests.add(method);
             }
         }
-        tests.sort(Comparator.comparing(Method::getName));
     }
 
     private void clear() {
@@ -84,42 +86,42 @@ public class XUnit {
             Test annotation = method.getAnnotation(Test.class);
             long start = System.currentTimeMillis();
             if (!annotation.ignore().equals("")) {
-                System.out.println("Method " + method.getName() + " is ignored.\nReason: " + annotation.ignore());
+                testResults.put(method.getName(), new TestResult(TestStatus.IGNORED, method.getName(), 0, annotation.ignore()));
+                ignored++;
                 continue;
             }
             Exception exception = null;
             boolean exceptionExpected = !annotation.expected().equals(Object.class);
-            boolean testResult = true;
+            boolean testPassed = true;
             try {
                 method.invoke(instance);
             } catch (Exception e) {
                 exception = e;
                 if (!e.getCause().getClass().equals(annotation.expected())) {
-                    testResult = false;
+                    testPassed = false;
                 }
             }
             if (exceptionExpected && exception == null) {
-                testResult = false;
+                testPassed = false;
             }
             long end = System.currentTimeMillis();
             for (Method afterMethod : afterTestMethods) {
                 afterMethod.invoke(instance);
             }
-            if (testResult) {
+            if (testPassed) {
                 passed++;
-                System.out.printf("Test %s passed in %s.\n", method.getName(),
-                        DurationFormatUtils.formatDurationWords(end - start,
-                                true, true));
+                testResults.put(method.getName(), new TestResult(
+                        TestStatus.PASSED, method.getName(), end - start, null));
             } else {
                 failed++;
-                System.out.printf("Test %s failed in %s.\n", method.getName(),
-                        DurationFormatUtils.formatDurationWords(end - start,
-                                true, true));
+                String reason;
                 if (exceptionExpected && exception == null) {
-                    System.out.printf(annotation.expected().getName() + " was expected.\n");
+                    reason = annotation.expected().getName() + " was expected.\n";
                 } else {
-                    System.out.println("Reason: " + exception.getCause().getMessage());
+                    reason = exception.getCause().getMessage();
                 }
+                testResults.put(method.getName(), new TestResult(
+                        TestStatus.FAILED, method.getName(), end - start, reason));
             }
         }
         for (Method method : afterClassTestMethods) {
@@ -128,8 +130,66 @@ public class XUnit {
     }
 
     private void printStatistics() {
-        System.out.printf("Total number of tests: %d\nPassed: %d\nFailed: %d\n", tests.size(),
-                passed, failed);
+        System.out.printf("Total number of tests: %d\nPassed: %d\nFailed: %d\nIgnored: %d\n", tests.size(),
+                passed, failed, ignored);
     }
 
+    static class TestResult {
+        private TestStatus result;
+        private String methodName;
+        private long time;
+        private String reason;
+
+        private TestResult(TestStatus status, String name,
+                           long time, String reason) {
+            this.result = status;
+            this.methodName = name;
+            this.time = time;
+            this.reason = reason;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public String getMethodName() {
+            return methodName;
+        }
+
+        public TestStatus getResult() {
+            return result;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        private void print() {
+            if (result == TestStatus.IGNORED) {
+                System.out.println("" +
+                        "Method " + methodName + " is ignored.\nReason: " + reason);
+            }
+            if (result == TestStatus.FAILED) {
+                System.out.printf("Test %s failed in %s.\n", methodName,
+                        DurationFormatUtils.formatDurationWords(time,
+                                true, true));
+                System.out.println("Reason: " + reason);
+            }
+            if (result == TestStatus.PASSED) {
+                System.out.printf("Test %s passed in %s.\n", methodName,
+                        DurationFormatUtils.formatDurationWords(time,
+                                true, true));
+            }
+        }
+    }
+
+    enum TestStatus {
+        PASSED,
+        FAILED,
+        IGNORED
+    }
+
+    HashMap<String, TestResult> getTestResults() {
+        return testResults;
+    }
 }
