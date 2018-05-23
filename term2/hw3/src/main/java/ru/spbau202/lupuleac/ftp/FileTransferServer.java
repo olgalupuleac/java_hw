@@ -27,10 +27,12 @@ public class FileTransferServer {
      */
     public static void main(String[] args) {
         if (args.length != 1) {
-            throw new RuntimeException("Incorrect usage of FileTransferServer.main():," +
+            System.err.println("Incorrect usage of FileTransferServer.main():," +
                     " the arguments should contain only port number.");
+            return;
         }
         int portNumber = Integer.parseInt(args[0]);
+        LOGGER.info("Starting server");
         try (
                 ServerSocket serverSocket = new ServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();

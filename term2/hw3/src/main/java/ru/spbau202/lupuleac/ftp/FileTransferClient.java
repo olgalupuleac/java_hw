@@ -51,7 +51,7 @@ public class FileTransferClient implements AutoCloseable {
         file.createNewFile();
         long count = 0;
         byte[] data = new byte[16384];
-        try(FileOutputStream fos = new FileOutputStream(file)){
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             while (count < size) {
                 int nRead = in.read(data, 0, data.length);
                 fos.write(data, 0, nRead);
