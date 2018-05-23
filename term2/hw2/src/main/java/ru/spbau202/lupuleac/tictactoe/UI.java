@@ -1,14 +1,11 @@
 package ru.spbau202.lupuleac.tictactoe;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -67,21 +64,15 @@ public class UI extends Application {
      */
     @NotNull
     private Scene choosePlayMode() {
-        window.setMinHeight(300);
-        window.setMinWidth(300);
+        window.setMinWidth(100);
+        window.setMinHeight(100);
         window.setTitle("Choose play mode");
-        VBox pane = new VBox();
-        pane.setPadding(new Insets(240));
-        pane.setSpacing(10);
-        pane.setPrefSize(600, 600);
-        pane.setStyle("-fx-background-color: #0000ff");
-        Button hotSeat = new Button("    Play with friend    ");
-        hotSeat.setLayoutX(250);
-        hotSeat.setLayoutY(130);
-        Button gameWithBot = new Button("      Play with bot     ");
-
-        gameWithBot.setLayoutX(250);
-        gameWithBot.setLayoutY(90);
+        GridPane grid = new GridPane();
+        drawBoxesInGridPane(grid, 7, 5);
+        Button hotSeat = new Button("Play with friend");
+        hotSeat.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        Button gameWithBot = new Button("Play with bot");
+        gameWithBot.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         gameWithBot.setOnAction(e -> {
             settings.setPlayMode(Settings.PlayMode.BOT);
             window.setTitle("Choose bot level");
@@ -92,11 +83,12 @@ public class UI extends Application {
             window.setScene(mainScene());
         });
         Button showGameStatistics = new Button("Show game statistics");
-        showGameStatistics.setLayoutX(250);
-        showGameStatistics.setLayoutY(170);
         showGameStatistics.setOnAction(e -> window.setScene(showStatistics()));
-        pane.getChildren().addAll(gameWithBot, hotSeat, showGameStatistics);
-        return new Scene(pane);
+        showGameStatistics.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        grid.add(hotSeat, 2, 1);
+        grid.add(gameWithBot, 2, 3);
+        grid.add(showGameStatistics, 2, 5);
+        return new Scene(grid);
     }
 
     /**
@@ -108,8 +100,6 @@ public class UI extends Application {
     @NotNull
     private Scene showStatistics() {
         Pane root = new Pane();
-        //root.setPadding(new Insets(240));
-        //root.setSpacing(10);
         root.setPrefSize(600, 600);
         Label label = new Label(statistics.showStatistics());
         Button newGame = new Button("New Game");
@@ -122,23 +112,42 @@ public class UI extends Application {
     }
 
     /**
+     * Creates boxes on grid pane, sets its size and color.
+     *
+     * @param grid    is a grid to be changed
+     * @param numRows is number of rows on grid pane to be created
+     * @param numCols is number of columns on grid pane to be created
+     */
+    private void drawBoxesInGridPane(GridPane grid, int numRows, int numCols) {
+        for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+            RowConstraints rc = new RowConstraints();
+            rc.setVgrow(Priority.ALWAYS); // allow row to grow
+            rc.setFillHeight(true); // ask nodes to fill height for row
+            grid.getRowConstraints().add(rc);
+        }
+        for (int colIndex = 0; colIndex < numCols; colIndex++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setHgrow(Priority.ALWAYS); // allow column to grow
+            cc.setFillWidth(true); // ask nodes to fill space for column
+            grid.getColumnConstraints().add(cc);
+        }
+        grid.setPrefSize(600, 600);
+        grid.setStyle("-fx-background-color: #0000ff");
+    }
+
+    /**
      * Shows the window where the player chooses a game level.
      *
      * @return the scene which is set as a scene to a primary stage
      */
     @NotNull
     private Scene chooseBotLevel() {
-        VBox root = new VBox();
-        root.setPadding(new Insets(240));
-        root.setSpacing(10);
-        root.setPrefSize(600, 600);
-        root.setStyle("-fx-background-color: #0000ff");
+        GridPane grid = new GridPane();
+        drawBoxesInGridPane(grid, 5, 3);
         Button bot1 = new Button("Easy");
-        bot1.setLayoutX(290);
-        bot1.setLayoutY(170);
         Button bot2 = new Button("Hard");
-        bot2.setLayoutX(290);
-        bot2.setLayoutY(130);
+        bot1.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        bot2.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         bot2.setOnAction(e -> {
             settings.setBotLevel(2);
             window.setScene(mainScene());
@@ -148,8 +157,9 @@ public class UI extends Application {
             window.setScene(mainScene());
         });
         bot = settings.createBot();
-        root.getChildren().addAll(bot2, bot1);
-        return new Scene(root);
+        grid.add(bot1, 1, 1);
+        grid.add(bot2, 1, 3);
+        return new Scene(grid);
     }
 
     /**
