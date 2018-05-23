@@ -11,7 +11,7 @@ do
 	  echo "$FILE"
       cd "$FILE"
       chmod +x gradlew
-      ./gradlew build --stacktrace --debug
+      ./gradlew build --stacktrace
       if [ $? -ne 0 ]; then
         exit 1
       fi
