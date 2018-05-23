@@ -10,10 +10,11 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class FileTransferClientTest {
+    private int port = 15000;
     @Before
     public void init() {
         Thread thread = new Thread(() -> {
-            String[] args = {"81"};
+            String[] args = {Integer.toString(port)};
             FileTransferServer.main(args);
         });
         thread.start();
@@ -21,7 +22,7 @@ public class FileTransferClientTest {
 
     @Test
     public void get() throws Exception {
-        try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
+        try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             client.get("src/test/resources/dir/file.txt");
             byte[] fileContent = IOUtils.toByteArray(new FileInputStream("downloads/src/test/resources/dir/file.txt"));
             byte[] expected = "aaaa".getBytes();
@@ -32,7 +33,7 @@ public class FileTransferClientTest {
 
     @Test
     public void list() throws Exception {
-        try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
+        try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
@@ -43,7 +44,7 @@ public class FileTransferClientTest {
 
     @Test
     public void severalQueries() throws Exception {
-        try (FileTransferClient client = new FileTransferClient("localhost", 81)) {
+        try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
