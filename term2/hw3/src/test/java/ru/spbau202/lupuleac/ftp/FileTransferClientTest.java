@@ -2,13 +2,16 @@ package ru.spbau202.lupuleac.ftp;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.FileInputStream;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileTransferClientTest {
     private int port = 15000;
     @Before
@@ -40,7 +43,7 @@ public class FileTransferClientTest {
         }
     }
 
-   /* @Test
+    @Test
     public void list() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
@@ -51,7 +54,7 @@ public class FileTransferClientTest {
         }
     }
 
-    @Test
+   /* @Test
     public void severalQueries() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
