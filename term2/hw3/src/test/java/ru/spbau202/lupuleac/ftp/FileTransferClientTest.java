@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class FileTransferClientTest {
     private int port = 15000;
-    /*@Before
+    @Before
     public void init() throws InterruptedException {
         Thread thread = new Thread(() -> {
             String[] args = {Integer.toString(port)};
@@ -19,14 +19,14 @@ public class FileTransferClientTest {
         });
         thread.start();
         Thread.sleep(1000);
-    }*/
+    }
 
     @Test
     public void testForTest() throws Exception{
-       /* try (FileTransferClient client = new FileTransferClient("localhost", port)) {
+        try (FileTransferClient client = new FileTransferClient("localhost", port)) {
            // client.get("src/test/resources/dir/file.txt");
             client.exit();
-        }*/
+        }
     }
 
     /*@Test
