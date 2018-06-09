@@ -54,7 +54,7 @@ public class FileTransferClientTest {
         }
     }
 
-   /* @Test
+    @Test
     public void severalQueries() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
@@ -67,6 +67,6 @@ public class FileTransferClientTest {
             assertArrayEquals(expected, fileContent);
             client.exit();
         }
-    }*/
+    }
 
 }
