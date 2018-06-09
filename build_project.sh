@@ -6,7 +6,7 @@ echo "end of list"
 for FILE in `ls`
 do 
     echo "$FILE"
-    if  [ -d "${FILE}" ] ; then
+    if  [ -d "${FILE}" || "$FILE" != "test1" ] ; then
 	  echo "again"
 	  echo "$FILE"
       cd "$FILE"
