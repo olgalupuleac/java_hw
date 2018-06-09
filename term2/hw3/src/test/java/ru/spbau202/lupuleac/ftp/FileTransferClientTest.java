@@ -21,15 +21,15 @@ public class FileTransferClientTest {
         Thread.sleep(1000);
     }
 
-    @Test
+   /* @Test
     public void testForTest() throws Exception{
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             client.get("src/test/resources/dir/file.txt");
             client.exit();
         }
     }
-
-    /*@Test
+*/
+    @Test
     public void get() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             client.get("src/test/resources/dir/file.txt");
@@ -40,7 +40,7 @@ public class FileTransferClientTest {
         }
     }
 
-    @Test
+   /* @Test
     public void list() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
             List<FileTransferClient.FileInfo> files = client.list("src/test/resources/dir");
