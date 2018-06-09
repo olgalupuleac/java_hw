@@ -24,7 +24,7 @@ public class FileTransferClientTest {
     @Test
     public void testForTest() throws Exception{
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
-           // client.get("src/test/resources/dir/file.txt");
+            client.get("src/test/resources/dir/file.txt");
             client.exit();
         }
     }
