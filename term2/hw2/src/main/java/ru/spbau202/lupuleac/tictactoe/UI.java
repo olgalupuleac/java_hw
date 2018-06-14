@@ -172,8 +172,9 @@ public class UI extends Application {
         window.setTitle("Game");
         window.setMinHeight(600);
         window.setMinWidth(600);
-        root = new Pane();
+        root = new GridPane();
         root.setPrefSize(600, 600);
+        //drawBoxesInGridPane((GridPane)root, 3, 3);
         drawGrid();
         Button restart = new Button("Restart");
         restart.setOnAction(e -> restart());
@@ -195,11 +196,25 @@ public class UI extends Application {
      * Draws the grid on the main scene.
      */
     private void drawGrid() {
+        for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+            RowConstraints rc = new RowConstraints();
+            rc.setVgrow(Priority.ALWAYS); // allow row to grow
+            rc.setFillHeight(true); // ask nodes to fill height for row
+            ((GridPane) root).getRowConstraints().add(rc);
+        }
+        for (int colIndex = 0; colIndex < 3; colIndex++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setHgrow(Priority.ALWAYS); // allow column to grow
+            cc.setFillWidth(true); // ask nodes to fill space for column
+            ((GridPane) root).getColumnConstraints().add(cc);
+        }
+        root.setPrefSize(600, 600);
+        //((GridPane) root).setStyle("-fx-border: 2px solid; -fx-border-color: black;");
         grid = new Box[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 grid[i][j] = new Box(j, i);
-                root.getChildren().addAll(grid[i][j]);
+                ((GridPane) root).add(grid[i][j], j, i);
             }
         }
     }
@@ -214,7 +229,8 @@ public class UI extends Application {
             return;
         }
         for (int i = 0; i < squares.getCoords().length; i += 2) {
-            grid[squares.getCoords()[i + 1]][squares.getCoords()[i]].setStyle("-fx-background-color: red;");
+            grid[squares.getCoords()[i + 1]][squares.getCoords()[i]].
+                    setStyle("-fx-background-color: red;-fx-border: 2px solid; -fx-border-color: black;");
         }
     }
 
@@ -259,14 +275,16 @@ public class UI extends Application {
         private Box(int x, int y) {
             this.x = x;
             this.y = y;
-            Rectangle border = new Rectangle(200, 200);
-            border.setFill(null);
-            border.setStroke(Color.BLACK);
+            //Rectangle border = new Rectangle(200, 200);
+            //border.setFill(null);
+            //border.setStroke(Color.BLACK);
+            setPrefSize(200, 200);
             sign.setFont(Font.font(80));
+            setStyle("-fx-border: 2px solid; -fx-border-color: black;");
             setAlignment(Pos.CENTER);
-            getChildren().addAll(border, sign);
-            setTranslateX(x * 200);
-            setTranslateY(y * 200);
+            getChildren().addAll(sign);
+            //setTranslateX(x * 200);
+            //setTranslateY(y * 200);
             setOnMouseClicked(event -> move());
         }
 

@@ -45,7 +45,10 @@ public class Statistics {
      * @param gameStatus is a game status to be preserved
      * @param playMode   is a play mode of the game which result is to be preserved
      */
-    public void increment(Board.GameStatus gameStatus, @NotNull Settings.PlayMode playMode) {
+    public void increment(Board.GameStatus gameStatus, Settings.PlayMode playMode) {
+        if(playMode == null){
+            return;
+        }
         if (playMode == Settings.PlayMode.HOT_SEAT) {
             incrementHotSeatStatistics(gameStatus);
         }
