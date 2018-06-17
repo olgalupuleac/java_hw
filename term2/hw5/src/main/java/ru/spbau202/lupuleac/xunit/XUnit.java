@@ -1,12 +1,14 @@
 package ru.spbau202.lupuleac.xunit;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.jetbrains.annotations.NotNull;
 import ru.spbau202.lupuleac.annotations.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Class which runs all tests in the given class.
@@ -18,6 +20,7 @@ public class XUnit {
     private ArrayList<Method> afterClassTestMethods = new ArrayList<>();
     private ArrayList<Method> tests = new ArrayList<>();
     private HashMap<String, TestResult> testResults = new HashMap<>();
+    private HashSet<String> methodsWithXUnitAnnotations = new HashSet<>();
     private Class<?> testClass;
     private int failed;
     private int passed;
@@ -35,7 +38,7 @@ public class XUnit {
      * @throws InstantiationException    if it occurs during method invocation
      */
     public void runTests() throws IllegalAccessException, InvocationTargetException,
-            InstantiationException {
+            InstantiationException, TestAnnotationException {
         clear();
         separateMethods(testClass.getMethods());
         launch();
@@ -48,30 +51,49 @@ public class XUnit {
      *
      * @param methods are methods to be separated
      */
-    private void separateMethods(Method[] methods) {
+    private void separateMethods(Method[] methods) throws TestAnnotationException {
         for (Method method : methods) {
             if (method.isAnnotationPresent(Before.class)) {
+                markAsAnnotated(method);
                 beforeTestMethods.add(method);
             }
             if (method.isAnnotationPresent(After.class)) {
+                markAsAnnotated(method);
                 afterTestMethods.add(method);
             }
             if (method.isAnnotationPresent(BeforeClass.class)) {
+                markAsAnnotated(method);
                 beforeClassTestMethods.add(method);
             }
             if (method.isAnnotationPresent(AfterClass.class)) {
+                markAsAnnotated(method);
                 afterClassTestMethods.add(method);
             }
             if (method.isAnnotationPresent(Test.class)) {
+                markAsAnnotated(method);
                 tests.add(method);
             }
         }
     }
 
     /**
+     * Checks if the method wasn't annotated twice.
+     *
+     * @param method is a method to be checked
+     * @throws TestAnnotationException if the method repeated twice
+     */
+    private void markAsAnnotated(@NotNull Method method) throws TestAnnotationException {
+        if (methodsWithXUnitAnnotations.contains(method.toGenericString())) {
+            throw new TestAnnotationException("Method " + method.getName() + " has several XUnit annotations");
+        }
+        methodsWithXUnitAnnotations.add(method.toGenericString());
+    }
+
+    /**
      * Clears resources.
      */
     private void clear() {
+        methodsWithXUnitAnnotations.clear();
         beforeClassTestMethods.clear();
         afterClassTestMethods.clear();
         beforeTestMethods.clear();

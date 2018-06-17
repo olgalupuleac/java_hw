@@ -35,4 +35,14 @@ public class XUnitTest {
         assertEquals(3, before);
         assertEquals(3, after);
     }
+
+    @Test(expected = TestAnnotationException.class)
+    public void incorrectTest() throws Exception {
+        try {
+            xUnit = new XUnit("ru.spbau202.lupuleac.xunit.IncorrectTestClass");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        xUnit.runTests();
+    }
 }
