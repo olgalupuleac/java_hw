@@ -9,5 +9,6 @@ do
       echo "$FILE"
       chmod +x gradlew
       ./gradlew build
+      cd ..
    fi
 done

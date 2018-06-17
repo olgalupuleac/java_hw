@@ -2,11 +2,14 @@ package ru.spbau202.lupuleac.ftp;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -16,6 +19,8 @@ public class FileTransferClient implements AutoCloseable {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_RESET = "\u001B[0m";
     private static final Logger LOGGER = Logger.getLogger("Client");
 
     /**
@@ -33,6 +38,82 @@ public class FileTransferClient implements AutoCloseable {
     }
 
     /**
+     * Launches the console app which represents the client.
+     *
+     * @param args args[0] should be port number, args[1] should be host name
+     */
+    public static void main(@NotNull String[] args) {
+        if (args.length != 2) {
+            System.err.println("Incorrect usage of FileTransferClient.main():," +
+                    " the arguments should contain port number and host name");
+            return;
+        }
+        LOGGER.setLevel(Level.WARNING);
+        int portNumber = Integer.parseInt(args[0]);
+        String host = args[1];
+        FileTransferClient client;
+        try {
+            client = new FileTransferClient(host, portNumber);
+            System.out.println("Connection created.\n" +
+                    "Enter \"list <pathname>\" to get list of files," +
+                    " \"get <filename>\" to download file or \"exit\" to stop");
+            Scanner terminalInput = new Scanner(System.in);
+            while (true) {
+                String cmd = terminalInput.nextLine();
+                Query action = extractQuery(cmd);
+                if (action == null) {
+                    System.out.println("Unknown command");
+                    continue;
+                }
+                if (action == Query.EXIT) {
+                    break;
+                }
+                String path = extractPath(cmd);
+                if (action == Query.LIST) {
+                    List<FileInfo> list = client.list(path);
+                    for (FileInfo fileInfo : list) {
+                        if (fileInfo.isDirectory) {
+                            System.out.println(ANSI_GREEN + fileInfo.name + ANSI_RESET);
+                        } else {
+                            System.out.println(fileInfo.name);
+                        }
+                    }
+                }
+                if (action == Query.GET) {
+                    client.get(path);
+                    System.out.println("Saved to downloads" + File.separator + path);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.warning("Cannot create a connection with server");
+            LOGGER.warning(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static Query extractQuery(@NotNull String command) {
+        if (command.startsWith("list ")) {
+            return Query.LIST;
+        }
+        if (command.startsWith("get ")) {
+            return Query.GET;
+        }
+        if (command.equals("exit")) {
+            return Query.EXIT;
+        }
+        return null;
+    }
+
+    @NotNull
+    private static String extractPath(@NotNull String command) {
+        if (command.startsWith("list ")) {
+            return command.substring(5);
+        }
+        return command.substring(4);
+    }
+
+
+    /**
      * Loads the file from the server.
      *
      * @param path is a path to a file to be loaded
@@ -40,7 +121,7 @@ public class FileTransferClient implements AutoCloseable {
      */
     public void get(@NotNull String path) throws IOException {
         LOGGER.info("Getting file " + path);
-        out.writeInt(2);
+        out.writeInt(Query.GET.ordinal());
         out.writeUTF(path);
         long size = in.readLong();
         if (size == 0) {
@@ -51,7 +132,7 @@ public class FileTransferClient implements AutoCloseable {
         file.createNewFile();
         long count = 0;
         byte[] data = new byte[16384];
-        try(FileOutputStream fos = new FileOutputStream(file)){
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             while (count < size) {
                 int nRead = in.read(data, 0, data.length);
                 fos.write(data, 0, nRead);
@@ -70,7 +151,7 @@ public class FileTransferClient implements AutoCloseable {
      */
     public List<FileInfo> list(@NotNull String path) throws IOException {
         LOGGER.info("Listing directory " + path);
-        out.writeInt(1);
+        out.writeInt(Query.LIST.ordinal());
         out.writeUTF(path);
         int size = in.readInt();
         List<FileInfo> files = new ArrayList<>();
@@ -89,7 +170,7 @@ public class FileTransferClient implements AutoCloseable {
      * @throws IOException if it occurs
      */
     public void exit() throws IOException {
-        out.writeInt(0);
+        out.writeInt(Query.EXIT.ordinal());
     }
 
     /**
