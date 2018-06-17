@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -47,6 +48,7 @@ public class FileTransferClient implements AutoCloseable {
                     " the arguments should contain port number and host name");
             return;
         }
+        LOGGER.setLevel(Level.WARNING);
         int portNumber = Integer.parseInt(args[0]);
         String host = args[1];
         FileTransferClient client;
@@ -58,16 +60,16 @@ public class FileTransferClient implements AutoCloseable {
             Scanner terminalInput = new Scanner(System.in);
             while (true) {
                 String cmd = terminalInput.nextLine();
-                int action = extractQuery(cmd);
-                if (action == -1) {
+                Query action = extractQuery(cmd);
+                if (action == null) {
                     System.out.println("Unknown command");
                     continue;
                 }
-                if (action == 0) {
+                if (action == Query.EXIT) {
                     break;
                 }
                 String path = extractPath(cmd);
-                if (action == 1) {
+                if (action == Query.LIST) {
                     List<FileInfo> list = client.list(path);
                     for (FileInfo fileInfo : list) {
                         if (fileInfo.isDirectory) {
@@ -77,7 +79,7 @@ public class FileTransferClient implements AutoCloseable {
                         }
                     }
                 }
-                if (action == 2) {
+                if (action == Query.GET) {
                     client.get(path);
                     System.out.println("Saved to downloads" + File.separator + path);
                 }
@@ -89,17 +91,17 @@ public class FileTransferClient implements AutoCloseable {
         }
     }
 
-    private static int extractQuery(@NotNull String command) {
+    private static Query extractQuery(@NotNull String command) {
         if (command.startsWith("list ")) {
-            return 1;
+            return Query.LIST;
         }
         if (command.startsWith("get ")) {
-            return 2;
+            return Query.GET;
         }
         if (command.equals("exit")) {
-            return 0;
+            return Query.EXIT;
         }
-        return -1;
+        return null;
     }
 
     @NotNull
@@ -118,8 +120,8 @@ public class FileTransferClient implements AutoCloseable {
      * @throws IOException if it occurs during the process
      */
     public void get(@NotNull String path) throws IOException {
-        //LOGGER.info("Getting file " + path);
-        out.writeInt(2);
+        LOGGER.info("Getting file " + path);
+        out.writeInt(Query.GET.ordinal());
         out.writeUTF(path);
         long size = in.readLong();
         if (size == 0) {
@@ -148,8 +150,8 @@ public class FileTransferClient implements AutoCloseable {
      * @throws IOException if it occurs during the process
      */
     public List<FileInfo> list(@NotNull String path) throws IOException {
-        //LOGGER.info("Listing directory " + path);
-        out.writeInt(1);
+        LOGGER.info("Listing directory " + path);
+        out.writeInt(Query.LIST.ordinal());
         out.writeUTF(path);
         int size = in.readInt();
         List<FileInfo> files = new ArrayList<>();
@@ -168,7 +170,7 @@ public class FileTransferClient implements AutoCloseable {
      * @throws IOException if it occurs
      */
     public void exit() throws IOException {
-        out.writeInt(0);
+        out.writeInt(Query.EXIT.ordinal());
     }
 
     /**

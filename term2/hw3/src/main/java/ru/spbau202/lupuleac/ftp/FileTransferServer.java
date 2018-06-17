@@ -42,14 +42,21 @@ public class FileTransferServer {
         ) {
             LOGGER.info("Connection created");
             String path;
-            int action;
-            while (isQuery((action = in.readInt()))) {
+            while (true) {
+                Query action = Query.fromInteger(in.readInt());
+                if(action == null){
+                    //it cannot occur if everything is used correctly, so it is runtime
+                    throw new RuntimeException("Invalid protocol");
+                }
+                if(action == Query.EXIT){
+                    break;
+                }
                 path = in.readUTF();
                 LOGGER.log(Level.INFO, "action = " + action + ", path = " + path);
-                if (action == 1) {
+                if (action == Query.LIST) {
                     processList(path, out);
                 }
-                if (action == 2) {
+                if (action == Query.GET) {
                     processGet(path, out);
                 }
             }
@@ -136,16 +143,5 @@ public class FileTransferServer {
         e.printStackTrace();
     }
 
-    /**
-     * Checks if the given integer is equal to 1 or 2
-     * (which means that it is a valid query).
-     *
-     * @param i is an integer to be checked
-     * @return true if the argument is equal to 1 or 2
-     */
-    @Contract(pure = true)
-    private static boolean isQuery(int i) {
-        return i == 1 || i == 2;
-    }
 }
 
