@@ -14,24 +14,18 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileTransferClientTest {
     private int port = 15000;
+
     @Before
     public void init() throws InterruptedException {
         Thread thread = new Thread(() -> {
             String[] args = {Integer.toString(port)};
             FileTransferServer.main(args);
         });
+        //thread.setDaemon(true);
         thread.start();
         Thread.sleep(1000);
     }
 
-   /* @Test
-    public void testForTest() throws Exception{
-        try (FileTransferClient client = new FileTransferClient("localhost", port)) {
-            client.get("src/test/resources/dir/file.txt");
-            client.exit();
-        }
-    }
-*/
     @Test
     public void get() throws Exception {
         try (FileTransferClient client = new FileTransferClient("localhost", port)) {
@@ -50,6 +44,9 @@ public class FileTransferClientTest {
             assertEquals(2, files.size());
             assertTrue(files.contains(new FileTransferClient.FileInfo("file.txt", false)));
             assertTrue(files.contains(new FileTransferClient.FileInfo("sub_dir", true)));
+            List<FileTransferClient.FileInfo> filesSubDir = client.list("src/test/resources/dir/sub_dir");
+            assertEquals(1, filesSubDir.size());
+            assertTrue(filesSubDir.contains(new FileTransferClient.FileInfo("a.txt", false)));
             client.exit();
         }
     }

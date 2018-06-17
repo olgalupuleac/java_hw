@@ -2,11 +2,13 @@ package ru.spbau202.lupuleac.ftp;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 /**
@@ -16,6 +18,8 @@ public class FileTransferClient implements AutoCloseable {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_RESET = "\u001B[0m";
     private static final Logger LOGGER = Logger.getLogger("Client");
 
     /**
@@ -33,13 +37,88 @@ public class FileTransferClient implements AutoCloseable {
     }
 
     /**
+     * Launches the console app which represents the client.
+     *
+     * @param args args[0] should be port number, args[1] should be host name
+     */
+    public static void main(@NotNull String[] args) {
+        if (args.length != 2) {
+            System.err.println("Incorrect usage of FileTransferClient.main():," +
+                    " the arguments should contain port number and host name");
+            return;
+        }
+        int portNumber = Integer.parseInt(args[0]);
+        String host = args[1];
+        FileTransferClient client;
+        try {
+            client = new FileTransferClient(host, portNumber);
+            System.out.println("Connection created.\n" +
+                    "Enter \"list <pathname>\" to get list of files," +
+                    " \"get <filename>\" to download file or \"exit\" to stop");
+            Scanner terminalInput = new Scanner(System.in);
+            while (true) {
+                String cmd = terminalInput.nextLine();
+                int action = extractQuery(cmd);
+                if (action == -1) {
+                    System.out.println("Unknown command");
+                    continue;
+                }
+                if (action == 0) {
+                    break;
+                }
+                String path = extractPath(cmd);
+                if (action == 1) {
+                    List<FileInfo> list = client.list(path);
+                    for (FileInfo fileInfo : list) {
+                        if (fileInfo.isDirectory) {
+                            System.out.println(ANSI_GREEN + fileInfo.name + ANSI_RESET);
+                        } else {
+                            System.out.println(fileInfo.name);
+                        }
+                    }
+                }
+                if (action == 2) {
+                    client.get(path);
+                    System.out.println("Saved to downloads" + File.separator + path);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.warning("Cannot create a connection with server");
+            LOGGER.warning(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static int extractQuery(@NotNull String command) {
+        if (command.startsWith("list ")) {
+            return 1;
+        }
+        if (command.startsWith("get ")) {
+            return 2;
+        }
+        if (command.equals("exit")) {
+            return 0;
+        }
+        return -1;
+    }
+
+    @NotNull
+    private static String extractPath(@NotNull String command) {
+        if (command.startsWith("list ")) {
+            return command.substring(5);
+        }
+        return command.substring(4);
+    }
+
+
+    /**
      * Loads the file from the server.
      *
      * @param path is a path to a file to be loaded
      * @throws IOException if it occurs during the process
      */
     public void get(@NotNull String path) throws IOException {
-        LOGGER.info("Getting file " + path);
+        //LOGGER.info("Getting file " + path);
         out.writeInt(2);
         out.writeUTF(path);
         long size = in.readLong();
@@ -69,7 +148,7 @@ public class FileTransferClient implements AutoCloseable {
      * @throws IOException if it occurs during the process
      */
     public List<FileInfo> list(@NotNull String path) throws IOException {
-        LOGGER.info("Listing directory " + path);
+        //LOGGER.info("Listing directory " + path);
         out.writeInt(1);
         out.writeUTF(path);
         int size = in.readInt();

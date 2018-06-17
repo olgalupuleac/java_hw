@@ -27,7 +27,7 @@ public class FileTransferServer {
      */
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.err.println("Incorrect usage of FileTransferServer.main():," +
+            System.err.println("Incorrect usage of FileTransferServer.main():" +
                     " the arguments should contain only port number.");
             return;
         }
@@ -45,7 +45,7 @@ public class FileTransferServer {
             int action;
             while (isQuery((action = in.readInt()))) {
                 path = in.readUTF();
-                LOGGER.log(Level.INFO, "action = " + action + ", path = "  + path);
+                LOGGER.log(Level.INFO, "action = " + action + ", path = " + path);
                 if (action == 1) {
                     processList(path, out);
                 }
@@ -98,7 +98,7 @@ public class FileTransferServer {
      * If the directory does not exist writes 0 as a size.
      *
      * @param path is a path to the directory
-     * @param out is an outputstream where to write
+     * @param out  is an outputstream where to write
      */
     private static void processList(@NotNull String path, @NotNull DataOutputStream out) {
         File dir = new File(path);
