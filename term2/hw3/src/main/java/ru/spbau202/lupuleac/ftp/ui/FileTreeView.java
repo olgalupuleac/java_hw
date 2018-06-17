@@ -3,12 +3,8 @@ package ru.spbau202.lupuleac.ftp.ui;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,6 +13,8 @@ import ru.spbau202.lupuleac.ftp.FileTransferClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 /**
@@ -24,14 +22,14 @@ import java.util.ArrayList;
  */
 public class FileTreeView extends Application {
     private FileTransferClient client;
-    private Stage primaryStage;
     private static int portNumber;
     private static String host;
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            throw new RuntimeException("Incorrect usage of FileTransferServer.main():," +
-                    " the arguments should contain only port number.");
+            System.err.println(
+                    "Incorrect usage: arguments should be port number and host name");
+            return;
         }
         portNumber = Integer.parseInt(args[0]);
         host = args[1];
@@ -49,11 +47,11 @@ public class FileTreeView extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
         try {
             client = new FileTransferClient(host, portNumber);
         } catch (IOException e) {
-            e.printStackTrace();
+            showExceptionWindow("Exception while trying to connect to server\n", e);
+            return;
         }
         primaryStage.setTitle("Files list");
         FileTreeItem rootItem = new FileTreeItem(new FileTransferClient.FileInfo("", true));
@@ -63,13 +61,12 @@ public class FileTreeView extends Application {
             if (!v.getValue().isLeaf()) {
                 return;
             }
+            String path = ((FileTreeItem) v.getValue()).getPath();
             try {
-                String path = ((FileTreeItem) v.getValue()).getPath();
                 showDownloadDialog(path);
                 client.get(path);
             } catch (IOException e) {
-                //TODO
-                e.printStackTrace();
+                showExceptionWindow("Error while downloading file " + path, e);
             }
         });
         StackPane root = new StackPane();
@@ -98,16 +95,15 @@ public class FileTreeView extends Application {
                 }
                 return super.getChildren();
             }
+            String path = getPath();
             try {
-                System.err.println(getPath());
                 wasListed = true;
                 client.list(getPath())
                         .stream()
                         .map(FileTreeItem::new)
                         .forEach(super.getChildren()::add);
             } catch (IOException e) {
-                //TODO
-                e.printStackTrace();
+                showExceptionWindow("Error while listing directory " + path, e);
             }
             return super.getChildren();
         }
@@ -132,22 +128,57 @@ public class FileTreeView extends Application {
     }
 
     /**
-     * Shows notification about downloading the file.
+     * Shows notification if an exception occurs.
      *
      * @param path is a path to file to be downloaded
      */
     private void showDownloadDialog(@NotNull String path) {
-        final Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(primaryStage);
-        Pane dialogVBox = new VBox();
-        Button ok = new Button("Ok");
-        ok.setLayoutY(100);
-        ok.setLayoutX(100);
-        ok.setOnAction(e -> ((Stage) ok.getScene().getWindow()).close());
-        dialogVBox.getChildren().addAll(new Text("Downloading file " + path), ok);
-        Scene dialogScene = new Scene(dialogVBox, 300, 200);
-        dialog.setScene(dialogScene);
-        dialog.show();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Downloading file " + path);
+
+        alert.showAndWait();
+    }
+
+    /**
+     * Shows notification about downloading the file.
+     *
+     * @param msg is a message to be shown
+     * @param e   is an exception which occurred
+     */
+    private void showExceptionWindow(@NotNull String msg, @NotNull Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Dialog");
+        alert.setHeaderText(msg);
+        alert.setContentText(e.getMessage());
+
+
+// Create expandable Exception.
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        Label label = new Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
     }
 }
