@@ -261,5 +261,10 @@ public class FileTransferClient implements AutoCloseable {
             return obj instanceof FileInfo && ((FileInfo) obj).name.equals(name)
                     && ((FileInfo) obj).isDirectory == isDirectory;
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }
